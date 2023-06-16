@@ -1,7 +1,17 @@
 import React from 'react'
 import '../Styles/Sidebar.scss'
 
-function Sidebar() {
+interface props {
+    tab: string,
+    setTab: React.Dispatch<React.SetStateAction<string>>
+
+}
+
+function Sidebar({tab, setTab}:props) {
+    console.log(tab)
+
+    
+
   return (
     <div className="sidebar">
         <div className="profile">
@@ -9,11 +19,11 @@ function Sidebar() {
             <p>Hello, Hugo</p>
         </div>
         <div className="buttons">
-            <p>Overview</p>
-            <p>Transactions</p>
-            <p>Storage</p>
-            <p>Database</p>
-            <p>Market</p>
+            <p onClick={() => setTab("overview")}>Overview</p>
+            <p onClick={() => setTab("transactions")}>Transactions</p>
+            <p onClick={() => setTab("storage")}>Storage</p>
+            <p onClick={() => setTab("database")}>Database</p>
+            <p onClick={() => setTab("market")}>Market</p>
             
         </div>
         <div className="footer">

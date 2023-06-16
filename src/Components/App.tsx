@@ -3,14 +3,14 @@ import '../Styles/App.scss'
 import Sidebar from '../Components/Sidebar.tsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tab, setTab] = useState("overview")
 
   return (
     <>
       <div id="main-window">
-        <Sidebar />
+        <Sidebar tab={tab} setTab={setTab}/>
         <div id="main-content">
-          <h1>This area is currently under construction! 🚧</h1>
+          <h1>Overview 🚧</h1>
         </div>
       </div>
     </>
