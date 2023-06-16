@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import '../Styles/App.scss'
+import Sidebar from '../Components/Sidebar.tsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -7,7 +8,10 @@ function App() {
   return (
     <>
       <div id="main-window">
-        <h1>React</h1>
+        <Sidebar />
+        <div id="main-content">
+          <h1>This area is currently under construction! 🚧</h1>
+        </div>
       </div>
     </>
   )
