@@ -17,7 +17,7 @@ function Sidebar() {
             
         </div>
         <div className="footer">
-            <p>Settings</p>
+            <p className="setting">Settings</p>
             <p className="version">V1.0</p>
         </div>
         
