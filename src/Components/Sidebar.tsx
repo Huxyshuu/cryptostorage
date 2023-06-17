@@ -13,7 +13,7 @@ function Sidebar({tab, setTab}:props) {
   return (
     <div className="sidebar">
         <div className="profile">
-            <img src="https://wiki.kerbalspaceprogram.com/images/thumb/4/4e/Kerbal_mostly_naked.jpg/300px-Kerbal_mostly_naked.jpg" alt="kerb" />
+            <img src="../../public/CryptoStorage.png" alt="kerb" />
             <p>Hello, Hugo</p>
         </div>
         <div className="buttons">
