@@ -18,7 +18,8 @@
 
         img {
             aspect-ratio: 1 / 1;
-            width: 70%;
+            max-width: 7rem;
+            width: 18vh;
             border-radius: 50%;
             align-items: center;
         }
@@ -44,7 +45,7 @@
         @include buttons;
 
         p {
-            padding: 5%;
+            padding: 0.8vh;
             margin-block: 3vh;
             border-radius: 0.5rem;
 
@@ -53,6 +54,11 @@
                 color: $white;
                 background-color: $main-light;
             }
+        }
+
+        .active {
+            color: $white;
+            background-color: $main-light;
         }
     }
 
@@ -72,9 +78,14 @@
             }
         }
 
+        .active {
+            color: $white;
+            background-color: $main-light;
+        }
+
         .version {
             padding-left: 5%;
-            margin-top: -1.5rem;
+            margin-top: -1rem;
             color: darken($grey, 15%);
         }
     }

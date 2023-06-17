@@ -1,16 +1,14 @@
 import React from 'react'
-import '../Styles/Sidebar.scss'
+import 'Styles/Sidebar.scss'
 
 interface props {
     tab: string,
     setTab: React.Dispatch<React.SetStateAction<string>>
-
 }
+const tabs: string[] = ['overview', 'transactions', 'storage', 'database', 'market'];
+
 
 function Sidebar({tab, setTab}:props) {
-    console.log(tab)
-
-    
 
   return (
     <div className="sidebar">
@@ -19,15 +17,18 @@ function Sidebar({tab, setTab}:props) {
             <p>Hello, Hugo</p>
         </div>
         <div className="buttons">
-            <p onClick={() => setTab("overview")}>Overview</p>
-            <p onClick={() => setTab("transactions")}>Transactions</p>
-            <p onClick={() => setTab("storage")}>Storage</p>
-            <p onClick={() => setTab("database")}>Database</p>
-            <p onClick={() => setTab("market")}>Market</p>
-            
+
+            {
+                tabs.map(currentTab => {
+                    return <p className={`${tab == currentTab ? "active" : ""}`} 
+                              onClick={() => setTab(currentTab)}
+                           >{currentTab.charAt(0).toUpperCase() + currentTab.slice(1)}</p>
+                })
+            }
+
         </div>
         <div className="footer">
-            <p className="setting" onClick={() => setTab("settings")}>Settings</p>
+            <p className={`setting ${tab == 'settings' ? "active" : ""}`} onClick={() => setTab("settings")}>Settings</p>
             <p className="version">V1.0</p>
         </div>
         
