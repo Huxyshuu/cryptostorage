@@ -27,7 +27,7 @@ function Sidebar({tab, setTab}:props) {
             
         </div>
         <div className="footer">
-            <p className="setting">Settings</p>
+            <p className="setting" onClick={() => setTab("settings")}>Settings</p>
             <p className="version">V1.0</p>
         </div>
         

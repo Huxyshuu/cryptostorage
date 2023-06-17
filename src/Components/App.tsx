@@ -5,12 +5,21 @@ import Sidebar from '../Components/Sidebar.tsx'
 function App() {
   const [tab, setTab] = useState("overview")
 
+  const tabs = {
+    overview: <h1>Overview 🚧</h1>,
+    transactions: <h1>Transactions 🚧</h1>,
+    storage: <h1>Storage 🚧</h1>,
+    database: <h1>Database 🚧</h1>,
+    market: <h1>Market 🚧</h1>,
+    settings: <h1>Settings 🚧</h1>
+  }
+
   return (
     <>
       <div id="main-window">
         <Sidebar tab={tab} setTab={setTab}/>
         <div id="main-content">
-          <h1>Overview 🚧</h1>
+          {tabs[tab as keyof typeof tabs]} // Render different tabs
         </div>
       </div>
     </>
