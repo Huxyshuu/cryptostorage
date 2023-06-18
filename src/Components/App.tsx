@@ -19,9 +19,13 @@ function App() {
     <>
       <div id="main-window">
         <Sidebar tab={tab} setTab={setTab}/>
-        <div id="main-content">
-          {tabs[tab as keyof typeof tabs]} {/* Render different tabs */}
+        <div id="content">
+          <div id="sidebar-margin">-</div>
+          <div id="main-content">
+            {tabs[tab as keyof typeof tabs]} {/* Render different tabs */}
+          </div>
         </div>
+        
       </div>
     </>
   )

@@ -2,7 +2,7 @@ import React from 'react'
 
 function Database() {
   return (
-    <div className="asd">
+    <div className="content database">
         <h1>Database 🚧</h1>
     </div>
   )

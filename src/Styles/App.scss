@@ -12,6 +12,7 @@ html {
 body {
   width: 100%;
   height: 100%;
+  background-color: $sec-dark;
 }
 
 h1 {
@@ -27,6 +28,21 @@ h1 {
   background-color: $sec-dark;
 }
 
+#content {
+  display: flex;
+  flex-direction: row;
+}
+
+#sidebar-margin {
+  width: 15vw;
+  max-width: 10rem;
+}
+
 #main-content {
-  margin-left: 20vw;
+  margin-left: 2rem;
+}
+
+.content {
+  height: 100vh;
+  width: 100%;
 }
