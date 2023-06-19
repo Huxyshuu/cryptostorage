@@ -39,5 +39,9 @@
         &:hover {
             cursor: pointer;
         }
+
+        &:active {
+            background-color: darken($main-light, 10%);
+        }
     }
 }

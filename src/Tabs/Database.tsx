@@ -9,8 +9,8 @@ function Database() {
           <p className="text">Current database:</p>
           <p className="current">None</p>
           <div>
-            <button>Change</button>
-            <button>Remove</button>
+            <button onClick={() => console.log("Change")}>Change</button>
+            <button onClick={() => console.log("Remove")}>Remove</button>
           </div>
         </div>
     </div>
