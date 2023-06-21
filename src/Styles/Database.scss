@@ -1,6 +1,6 @@
 @import '../Utilities/variables.scss';
 
-.database-select {
+.database-current {
     display: flex;
     flex-direction: row;
     color: $white;
@@ -8,14 +8,14 @@
     .text {
         background-color: $main-dark;
         padding: 0.5rem;
-        min-width: 11rem;
+        min-width: 15rem;
         text-align: center;
     }
 
     .current {
         background-color: $sec-light;
         padding: 0.5rem;
-        min-width: 11rem;
+        min-width: 18rem;
         text-align: center;
     }
 
@@ -26,22 +26,34 @@
         align-items: center;
         margin-left: 1rem;
     }
+}
 
-    div button {
+.database-button {
+    button, label {
+        display: inline-block;
+        text-align: center;
+        font-family: $main-font;
+        font-weight: 300;
+        font-size: 0.9rem;
         color: $white;
         background-color: $main-light;
         border-radius: 0.5rem;
-        width: 5rem;
-        height: 2rem;
+        min-width: 7.3rem;
+        padding: 0.5rem;
         border-style: none;
         margin: 0.3rem;
-
+        margin-inline: 0.5rem;
+    
         &:hover {
             cursor: pointer;
         }
-
+    
         &:active {
             background-color: darken($main-light, 10%);
         }
+    }
+
+    input {
+        display: none;
     }
 }

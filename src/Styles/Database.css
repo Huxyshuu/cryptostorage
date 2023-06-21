@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+/*
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+*/
+.database-current {
+  display: flex;
+  flex-direction: row;
+  color: #FFF;
+}
+.database-current .text {
+  background-color: #372E48;
+  padding: 0.5rem;
+  min-width: 15rem;
+  text-align: center;
+}
+.database-current .current {
+  background-color: #826CA6;
+  padding: 0.5rem;
+  min-width: 18rem;
+  text-align: center;
+}
+.database-current div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.database-button button {
+  color: #FFF;
+  background-color: #9456FF;
+  border-radius: 0.5rem;
+  min-width: 7.7rem;
+  height: 2rem;
+  border-style: none;
+  margin: 0.3rem;
+  margin-inline: 0.5rem;
+}
+.database-button button:hover {
+  cursor: pointer;
+}
+.database-button button:active {
+  background-color: #7423ff;
+}/*# sourceMappingURL=Database.css.map */

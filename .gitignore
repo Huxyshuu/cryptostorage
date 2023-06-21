@@ -24,3 +24,5 @@ release
 *.njsproj
 *.sln
 *.sw?
+src/Database/database1.db
+src/Database/database2.db

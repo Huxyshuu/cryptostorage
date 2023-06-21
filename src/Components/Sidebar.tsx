@@ -19,9 +19,10 @@ function Sidebar({tab, setTab}:props) {
         <div className="buttons">
 
             {
-                tabs.map(currentTab => {
+                tabs.map((currentTab, index) => {
                     return <p className={`${tab == currentTab ? "active" : ""}`} 
                               onClick={() => setTab(currentTab)}
+                              key={`sidebar-button-${index}`}
                            >{currentTab.charAt(0).toUpperCase() + currentTab.slice(1)}</p>
                 })
             }
