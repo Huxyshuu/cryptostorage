@@ -16,6 +16,7 @@ export function addDatabase(event: Event): void {
                 else {
                     currentDatabase = `./src/Database/${ev.name}`
                     document.getElementById("currentDatabase").innerHTML = ev.name;
+                    document.getElementById("dateAdded").innerHTML = `Date added: ${getTime()}`
                 }
             });
         }
@@ -27,12 +28,14 @@ export function changeDatabase(event: Event): void {
     if (event && ev) {
         currentDatabase = `./src/Database/${ev.name}`
         document.getElementById("currentDatabase").innerHTML = ev.name;
+        document.getElementById("dateAdded").innerHTML = `Date added: ${getTime()}`
     }
 }
 
 export function removeCurrentDatabase(): void {
     currentDatabase = "None";
     document.getElementById("currentDatabase").innerHTML = "None";
+    document.getElementById("dateAdded").innerHTML = "-"
 }
 
 export function createDatabase(name: string) {
@@ -45,5 +48,16 @@ export function createDatabase(name: string) {
 export function createTable() {
     const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, short, value, amount, date, taxed)';
     db.run(sql);
+}
+
+function getTime() {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    let currentDate = `${day}.${month}.${year}`;
+    return currentDate;
 }
 

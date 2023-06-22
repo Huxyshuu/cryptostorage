@@ -57,3 +57,17 @@
         display: none;
     }
 }
+
+.database-info {
+    background-color: $main-dark;
+    margin: 1.2rem;
+
+
+    p {
+        margin:0;
+        padding-block: 1rem;
+        color: $white;
+        text-align: center;
+        border-bottom: dashed $white 0.1rem;
+    }
+}
