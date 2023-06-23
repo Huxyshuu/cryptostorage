@@ -1,5 +1,5 @@
-import sqlite3 from 'sqlite3';
-import fs from 'fs';
+const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 
 let currentDatabase = "None";
 
