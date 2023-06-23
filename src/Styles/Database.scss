@@ -69,5 +69,9 @@
         color: $white;
         text-align: center;
         border-bottom: dashed $white 0.1rem;
+
+        &:last-of-type {
+            border: none;
+        }
     }
 }

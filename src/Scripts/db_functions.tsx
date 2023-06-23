@@ -16,7 +16,7 @@ export function addDatabase(event: Event): void {
                 else {
                     currentDatabase = `./src/Database/${ev.name}`
                     document.getElementById("currentDatabase").innerHTML = ev.name;
-                    document.getElementById("dateAdded").innerHTML = `Date added: ${getTime()}`
+                    setTime();
                 }
             });
         }
@@ -24,11 +24,12 @@ export function addDatabase(event: Event): void {
 }
 
 export function changeDatabase(event: Event): void {
-    const ev = event.target.files[0];
-    if (event && ev) {
-        currentDatabase = `./src/Database/${ev.name}`
-        document.getElementById("currentDatabase").innerHTML = ev.name;
-        document.getElementById("dateAdded").innerHTML = `Date added: ${getTime()}`
+    const file = event.target.files[0];
+    if (event && file) {
+        currentDatabase = `./src/Database/${file.name}`
+        document.getElementById("currentDatabase").innerHTML = file.name;
+        setTime();
+        setSize(file.path)
     }
 }
 
@@ -36,6 +37,7 @@ export function removeCurrentDatabase(): void {
     currentDatabase = "None";
     document.getElementById("currentDatabase").innerHTML = "None";
     document.getElementById("dateAdded").innerHTML = "-"
+    document.getElementById("fileSize").innerHTML = "-"
 }
 
 export function createDatabase(name: string) {
@@ -50,14 +52,19 @@ export function createTable() {
     db.run(sql);
 }
 
-function getTime() {
-    const date = new Date();
+function setTime(): void {
+    const date = new Date().toLocaleDateString("fi-FI");
+    document.getElementById("dateAdded").innerHTML = `Date added: ${date}`
+}
 
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-
-    let currentDate = `${day}.${month}.${year}`;
-    return currentDate;
+function setSize(file: string): void {
+    const sizeInBytes = fs.statSync(file).size;
+    const sizeInKB = sizeInBytes / 1024;
+    const sizeInMB = sizeInKB / 1024;
+    if (sizeInKB < 1000) {
+        document.getElementById("fileSize").innerHTML = `File size: ${sizeInKB.toFixed(2)} KB`;
+    } else {
+        document.getElementById("fileSize").innerHTML = `File size: ${sizeInMB.toFixed(2)} MB`;
+    }
 }
 
