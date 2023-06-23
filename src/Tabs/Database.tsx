@@ -17,7 +17,7 @@ function Database() {
           <input onChange={addDatabase} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
           <label htmlFor="database-file-change">Change</label>
           <input onChange={changeDatabase} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
-          <button onClick={() => removeCurrentDatabase()}>Remove</button>
+          <button onClick={removeCurrentDatabase}>Remove</button>
         </div>
         <div className="database-info">
           <p id="dateAdded">Date added: -</p>

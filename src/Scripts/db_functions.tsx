@@ -29,15 +29,22 @@ export function changeDatabase(event: Event): void {
         currentDatabase = `./src/Database/${file.name}`
         document.getElementById("currentDatabase").innerHTML = file.name;
         setTime();
-        setSize(file.path)
+        setSize(file.path);
+        setEdited(file.path);
     }
 }
 
 export function removeCurrentDatabase(): void {
     currentDatabase = "None";
     document.getElementById("currentDatabase").innerHTML = "None";
-    document.getElementById("dateAdded").innerHTML = "-"
-    document.getElementById("fileSize").innerHTML = "-"
+    document.getElementById("dateAdded").innerHTML = "Date added: -"
+    document.getElementById("fileSize").innerHTML = "File size: -"
+    document.getElementById("lastEdited").innerHTML = `Last edited: -`;
+
+
+    // reset the onChange events
+    document.getElementById("database-file-change").value = "";
+    document.getElementById("database-file-add").value = "";
 }
 
 export function createDatabase(name: string) {
@@ -55,6 +62,11 @@ export function createTable() {
 function setTime(): void {
     const date = new Date().toLocaleDateString("fi-FI");
     document.getElementById("dateAdded").innerHTML = `Date added: ${date}`
+}
+
+function setEdited(file: string): void {
+    const dateEdited = fs.statSync(file).mtime.toLocaleDateString("fi-FI");
+    document.getElementById("lastEdited").innerHTML = `Last edited: ${dateEdited}`;
 }
 
 function setSize(file: string): void {
