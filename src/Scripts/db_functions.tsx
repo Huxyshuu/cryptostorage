@@ -4,22 +4,25 @@ const Store = require('electron-store');
 
 const store = new Store();
 
-let currentDatabase = "None";
+let currentDatabase = store.get("database.current");
 
 export function addDatabase(event: Event): void {
-    const ev = event.target.files[0];
-    if (event && ev) {
-        if (fs.existsSync(`./src/Database/${ev.name}`)) {
+    const file = event.target.files[0];
+    if (event && file) {
+        if (fs.existsSync(`./src/Database/${file.name}`)) {
             console.log("The file already exists. Please choose a different file.");
         } else {
-            fs.copyFile(ev.path, `./src/Database/${ev.name}`, (err) => {
+            fs.copyFile(file.path, `./src/Database/${file.name}`, (err) => {
                 if (err) {
                     console.log(err.message);
                 }
                 else {
-                    currentDatabase = `./src/Database/${ev.name}`
-                    document.getElementById("currentDatabase").innerHTML = ev.name;
+                    currentDatabase = `./src/Database/${file.name}`
+                    document.getElementById("currentDatabase").innerHTML = file.name;
                     setTime();
+                    setSize(file.path);
+                    setEdited(file.path);
+                    saveData();
                 }
             });
         }
@@ -29,11 +32,12 @@ export function addDatabase(event: Event): void {
 export function changeDatabase(event: Event): void {
     const file = event.target.files[0];
     if (event && file) {
-        currentDatabase = `./src/Database/${file.name}`
+        currentDatabase = `${file.path}`
         document.getElementById("currentDatabase").innerHTML = file.name;
         setTime();
         setSize(file.path);
         setEdited(file.path);
+        saveData();
     }
 }
 
@@ -48,6 +52,8 @@ export function removeCurrentDatabase(): void {
     // reset the onChange events
     document.getElementById("database-file-change").value = "";
     document.getElementById("database-file-add").value = "";
+
+    saveData();
 }
 
 export function createDatabase(name: string) {
@@ -84,6 +90,23 @@ function setSize(file: string): void {
         document.getElementById("fileSize").innerHTML = `File size: ${sizeInKB.toFixed(2)} KB`;
     } else {
         document.getElementById("fileSize").innerHTML = `File size: ${sizeInMB.toFixed(2)} MB`;
+    }
+}
+
+export function saveData() {
+    store.set('database.current', currentDatabase)
+}
+
+export function loadData() {
+    currentDatabase = store.get('database.current');
+
+    if (currentDatabase === undefined || currentDatabase === "None") {
+        removeCurrentDatabase();
+    } else {
+        document.getElementById("currentDatabase").innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+        setTime();
+        setEdited(currentDatabase);
+        setSize(currentDatabase);
     }
 }
 

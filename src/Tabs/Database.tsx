@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import 'Styles/Database.scss'
-import {addDatabase, changeDatabase, removeCurrentDatabase} from '../Scripts/db_functions.tsx';
+import {addDatabase, changeDatabase, removeCurrentDatabase, saveData, loadData} from '../Scripts/db_functions.tsx';
 
 function Database() {
+  
+  useEffect(() => {
+    loadData();
+  })
 
   return (
     <div className="content database">
