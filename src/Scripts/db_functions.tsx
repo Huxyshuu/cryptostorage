@@ -1,5 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const Store = require('electron-store');
+
+const store = new Store();
 
 let currentDatabase = "None";
 
@@ -57,6 +60,10 @@ export function createDatabase(name: string) {
 export function createTable() {
     const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, short, value, amount, date, taxed)';
     db.run(sql);
+}
+
+export function getDatabase(): string {
+    return currentDatabase;
 }
 
 function setTime(): void {

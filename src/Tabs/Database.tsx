@@ -21,8 +21,8 @@ function Database() {
         </div>
         <div className="database-info">
           <p id="dateAdded">Date added: -</p>
-          <p id="lastEdited">Last edited: 15.06.2023</p>
-          <p id="fileSize">File size: 2.34 MB</p>
+          <p id="lastEdited">Last edited: -</p>
+          <p id="fileSize">File size: -</p>
         </div>
     </div>
   )
