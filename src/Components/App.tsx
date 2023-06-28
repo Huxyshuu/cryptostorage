@@ -3,13 +3,14 @@ import 'Styles/App.scss'
 import Sidebar from 'Components/Sidebar.tsx'
 import Database from 'Tabs/Database.tsx'
 import Overview from 'Tabs/Overview.tsx'
+import Transactions from 'Tabs/Transactions.tsx'
 
 function App() {
   const [tab, setTab] = useState("overview")
 
   const tabs = {
     overview: <Overview />,
-    transactions: <h1>Transactions 🚧</h1>,
+    transactions: <Transactions />,
     storage: <h1>Storage 🚧</h1>,
     database: <Database />,
     market: <h1>Market 🚧</h1>,
