@@ -1,61 +1,88 @@
-const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
-const Store = require('electron-store');
+const sqlite3 = await require('sqlite3');
+const fs = await require('fs');
+const Store = await require('electron-store');
 
 const store = new Store();
 
 let currentDatabase = store.get("database.current");
 
 export function addDatabase(event: Event): void {
-    const file = event.target.files[0];
-    if (event && file) {
-        if (fs.existsSync(`./src/Database/${file.name}`)) {
-            console.log("The file already exists. Please choose a different file.");
-        } else {
-            fs.copyFile(file.path, `./src/Database/${file.name}`, (err) => {
-                if (err) {
-                    console.log(err.message);
-                }
-                else {
-                    currentDatabase = `./src/Database/${file.name}`
-                    document.getElementById("currentDatabase").innerHTML = file.name;
-                    setTime();
-                    setSize(file.path);
-                    setEdited(file.path);
-                    saveData();
-                }
-            });
+    if (event.target !== null) {
+        const ev = (event.target as HTMLInputElement).files;
+        if (ev !== null) {
+            const file = ev[0];
+
+            if (fs.existsSync(`./src/Database/${file.name}`)) {
+                console.log("The file already exists. Please choose a different file.");
+            } else {
+                fs.copyFile(file.path, `./src/Database/${file.name}`, (err) => {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                    else {
+                        currentDatabase = `./src/Database/${file.name}`
+    
+                        const current = document.getElementById("currentDatabase");
+                        if (current !== null) current.innerHTML = file.name;
+                        
+                        setTime();
+                        setSize(file.path);
+                        setEdited(file.path);
+                        saveData();
+                    }
+                });
+            }
         }
     }
 }
 
 export function changeDatabase(event: Event): void {
-    const file = event.target.files[0];
-    if (event && file) {
-        currentDatabase = `${file.path}`
-        document.getElementById("currentDatabase").innerHTML = file.name;
-        setTime();
-        setSize(file.path);
-        setEdited(file.path);
-        saveData();
+    
+    if (event.target !== null) {
+        const ev = (event.target as HTMLInputElement).files;
+        if (ev !== null) {
+            const file = ev[0];
+
+            currentDatabase = `${file.path}`
+
+            const current = document.getElementById("currentDatabase");
+            if (current !== null) current.innerHTML = file.name;
+
+            setTime();
+            setSize(file.path);
+            setEdited(file.path);
+            saveData();
+        }
     }
 }
 
 export function removeCurrentDatabase(): void {
+    const current = document.getElementById("currentDatabase");
+    const dateAdded = document.getElementById("dateAdded");
+    const fileSize = document.getElementById("fileSize");
+    const lastEdited = document.getElementById("lastEdited");
+
     currentDatabase = "None";
-    document.getElementById("currentDatabase").innerHTML = "None";
-    document.getElementById("dateAdded").innerHTML = "Date added: -"
-    document.getElementById("fileSize").innerHTML = "File size: -"
-    document.getElementById("lastEdited").innerHTML = `Last edited: -`;
+    if (current !== null && dateAdded !== null && fileSize !== null && lastEdited !== null) {
+        current.innerHTML = "None";
+        dateAdded.innerHTML = "Date added: -"
+        fileSize.innerHTML = "File size: -"
+        lastEdited.innerHTML = `Last edited: -`;
+    }
+    
 
-
+    const change = document.getElementById("database-file-change") as HTMLInputElement;
+    const add = document.getElementById("database-file-add") as HTMLInputElement;
     // reset the onChange events
-    document.getElementById("database-file-change").value = "";
-    document.getElementById("database-file-add").value = "";
-
+    if (change !== null && add !== null) {
+        change.value = "";
+        add.value = "";
+    }
+    
     saveData();
 }
 
+/*
 export function createDatabase(name: string) {
     const db = new sqlite3.Database('./src/Database/database1.db',
         (err) => {
@@ -63,10 +90,12 @@ export function createDatabase(name: string) {
         });
 }
 
+
 export function createTable() {
     const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, short, value, amount, date, taxed)';
     db.run(sql);
 }
+*/
 
 export function getDatabase(): string {
     return currentDatabase;
@@ -74,23 +103,41 @@ export function getDatabase(): string {
 
 function setTime(): void {
     const date = new Date().toLocaleDateString("fi-FI");
-    document.getElementById("dateAdded").innerHTML = `Date added: ${date}`
+    // Check for null
+    const dateAdded = document.getElementById("dateAdded");
+    if (dateAdded !== null) {
+        dateAdded.innerHTML = `Date added: ${date}`;
+    } else {
+        alert("Oops! SetTime failed")
+    }
 }
 
 function setEdited(file: string): void {
     const dateEdited = fs.statSync(file).mtime.toLocaleDateString("fi-FI");
-    document.getElementById("lastEdited").innerHTML = `Last edited: ${dateEdited}`;
+    const lastEdited = document.getElementById("lastEdited");
+    if (lastEdited !== null) {
+        lastEdited.innerHTML = `Last edited: ${dateEdited}`;
+    } else {
+        alert("Oops! lastEdited failed")
+    }
 }
 
 function setSize(file: string): void {
     const sizeInBytes = fs.statSync(file).size;
     const sizeInKB = sizeInBytes / 1024;
     const sizeInMB = sizeInKB / 1024;
-    if (sizeInKB < 1000) {
-        document.getElementById("fileSize").innerHTML = `File size: ${sizeInKB.toFixed(2)} KB`;
+
+    const fileSize = document.getElementById("fileSize");
+    if (fileSize !== null) {
+        if (sizeInKB < 1000) {
+            fileSize.innerHTML = `File size: ${sizeInKB.toFixed(2)} KB`;
+        } else {
+            fileSize.innerHTML = `File size: ${sizeInMB.toFixed(2)} MB`;
+        }
     } else {
-        document.getElementById("fileSize").innerHTML = `File size: ${sizeInMB.toFixed(2)} MB`;
+        alert("Oops! FileSize failed")
     }
+    
 }
 
 export function saveData() {
@@ -103,7 +150,10 @@ export function loadData() {
     if (currentDatabase === undefined || currentDatabase === "None") {
         removeCurrentDatabase();
     } else {
-        document.getElementById("currentDatabase").innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+        const current = document.getElementById("currentDatabase");
+        if (current !== null) {
+            current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+        }
         setTime();
         setEdited(currentDatabase);
         setSize(currentDatabase);
