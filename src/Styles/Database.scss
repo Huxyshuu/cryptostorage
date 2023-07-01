@@ -30,17 +30,9 @@
 
 .database-button {
     button, label {
+        @include buttonStyling;
+
         display: inline-block;
-        text-align: center;
-        font-family: $main-font;
-        font-weight: 300;
-        font-size: 0.9rem;
-        color: $white;
-        background-color: $main-light;
-        border-radius: 0.5rem;
-        min-width: 7.3rem;
-        padding: 0.5rem;
-        border-style: none;
         margin: 0.3rem;
         margin-inline: 0.5rem;
     

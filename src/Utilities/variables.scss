@@ -13,3 +13,24 @@ $sec-light: #826CA6;
 
 $white: #FFF;
 $grey: #9d9d9d;
+
+@mixin buttonStyling {
+    text-align: center;
+    font-family: $main-font;
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: $white;
+    background-color: $main-light;
+    border-radius: 0.5rem;
+    min-width: 7.3rem;
+    padding: 0.5rem;
+    border-style: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:active {
+        background-color: darken($main-light, 10%);
+    }
+}

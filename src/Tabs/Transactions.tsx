@@ -10,9 +10,32 @@ function Transactions() {
 
     return (
         <div className="content transactions">
-            <h1>Transactions</h1>
-            <div>
-                stuff
+            <div className="header">
+                <h1>Transactions</h1>
+                <div>
+                    <button>Add</button>
+                    <button>Remove</button>
+                    <button>Edit</button>
+                </div>
+            </div>
+            
+            <div className="transactionCoin">
+                <div className="titles">
+                    <p>Coin</p>
+                    <p>Current Amount</p>
+                    <p>Total Sum</p>
+                    <p>Current Limit</p>
+                    <p>Profit Sum</p>
+                </div>
+                <div className="info">
+                    <div>
+                        <p>-</p>
+                    </div>
+                    <p>-</p>
+                    <p>- €</p>
+                    <p>- €</p>
+                    <p>- €</p>
+                </div>
             </div>
         </div>
     )
