@@ -30,6 +30,11 @@ function Transactions() {
                 <div className="info">
                     <div>
                         <p>-</p>
+                        <div>
+                            <button>up</button>
+                            <button>down</button>
+                        </div>
+                        
                     </div>
                     <p>-</p>
                     <p>- €</p>
