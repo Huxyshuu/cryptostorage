@@ -19,12 +19,12 @@
 
 @mixin coinStyle {
     color: $white;
-            background-color: $main-dark;
-            min-width: 7rem;
-            width: 100%;
-            height: 2rem;
-            margin: 0;
-            text-align: center;
+    background-color: $main-dark;
+    min-width: 7rem;
+    width: 100%;
+    height: 2rem;
+    margin: 0;
+    text-align: center;
 }
 
 .transactionCoin {
@@ -34,6 +34,7 @@
 
     .titles {
         display: flex;
+        line-height: 2rem;
 
         p {
             @include coinStyle;
@@ -52,19 +53,55 @@
 
     .info {
         display: flex;
+        line-height: 2rem;
 
         div {
+            display: flex;
             min-width: 7rem;
             width: 100%;
+
+            img {
+                max-width: 2rem;
+                aspect-ratio: 1 / 1;
+                border-bottom-left-radius: 0.5rem;
+                background-color: $sec-light;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            p {
+                @include coinStyle;
+                background-color: $sec-light;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+                background-color: $sec-light;
+                color: $white;
+
+                .arrows {
+                    &:hover {
+                        cursor: pointer;
+                        color: lighten($main-light, 10%);
+                    }
+
+                    &:active {
+                        color: darken($main-light, 10%);
+                    }
+                }
+            }
         }
 
-        p {
+        & > p {
             @include coinStyle;
             background-color: $sec-light;
-
-            &:first-of-type {
-                border-bottom-left-radius: 0.5rem; 
-            }
 
             &:last-of-type {
                 border-bottom-right-radius: 0.5rem; 

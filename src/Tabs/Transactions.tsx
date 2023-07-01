@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import 'Styles/Transactions.scss';
 import {getDatabase, loadData} from '../Scripts/db_functions.tsx';
+import { Icon } from '@iconify/react';
+import upSolid from '@iconify/icons-teenyicons/up-solid';
 
 function Transactions() {
 
@@ -29,17 +31,18 @@ function Transactions() {
                 </div>
                 <div className="info">
                     <div>
-                        <p>-</p>
+                        <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="eth" />
+                        <p>Etherium</p>
                         <div>
-                            <button>up</button>
-                            <button>down</button>
+                            <Icon className="arrows" icon={upSolid} />
+                            <Icon className="arrows" icon={upSolid} rotate={2} />
                         </div>
                         
                     </div>
-                    <p>-</p>
-                    <p>- €</p>
-                    <p>- €</p>
-                    <p>- €</p>
+                    <p>2000</p>
+                    <p>2000 €</p>
+                    <p>2000 €</p>
+                    <p>2000 €</p>
                 </div>
             </div>
         </div>
