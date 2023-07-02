@@ -23,7 +23,7 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.PUBLIC, 'CryptoStorage.ico'),
-    minWidth: 750,
+    minWidth: 900,
     minHeight: 600,
 
     webPreferences: {

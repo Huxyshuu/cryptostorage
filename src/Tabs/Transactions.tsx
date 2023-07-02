@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
 import {getDatabase, loadData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
@@ -18,8 +18,8 @@ function Transactions() {
                 <h1>Transactions</h1>
                 <div>
                     <button>Add</button>
-                    <button>Remove</button>
                     <button>Edit</button>
+                    <button>Remove</button>
                 </div>
             </div>
             
