@@ -155,7 +155,7 @@
 
             &:first-of-type {
                 border-bottom-left-radius: 0.5rem; 
-                width: 1rem;
+                width: 2rem;
                 border: none;
                 color: $soft-red;
                 font-size: 2rem;
@@ -205,8 +205,6 @@
                 font-weight: 500;
             }
         }
-
-        
 
         .titles {
             p {
@@ -270,6 +268,13 @@
     
                 &:last-of-type {
                     border-bottom-right-radius: 0; 
+                }
+
+                &:focus {
+                    outline: none;
+                    border:1px solid $main-light;
+                    box-shadow: 0 0 1rem $sec-light;
+                    font-size: 1.5rem;
                 }
             }
         }

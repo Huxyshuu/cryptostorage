@@ -101,13 +101,13 @@ function Transactions() {
                                 <input type="checkbox" value="None" id="squaredTwo" name="check" />
                                 <label htmlFor="squaredTwo"></label>
                             </div>
-                            <input type="text" />
-                            <input type="text" />
-                            <input type="text" />
-                            <input type="text" />
-                            <input type="text" />
-                            <input type="text" />
-                            <input type="text" />
+                            <input type="text" id="date"/>
+                            <input type="text" id="value"/>
+                            <input type="text" id="amount"/>
+                            <input type="text" id="total"/>
+                            <input type="text" id="fee"/>
+                            <input type="text" id="return"/>
+                            <input type="text" id="profit"/>
                         </form>
                 </div>
                 :
