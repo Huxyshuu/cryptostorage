@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
 import {getDatabase, loadData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
 function Transactions() {
+
+    const [dataExists, setDataExists] = useState(true);
 
     useEffect(() =>  {
         console.log(getDatabase());
@@ -44,6 +46,42 @@ function Transactions() {
                     <p>2000 €</p>
                     <p>2000 €</p>
                 </div>
+            </div>
+
+            <div className="transactionStuff">
+                <div className="titles">
+                    <p>Taxed</p>
+                    <p>Date</p>
+                    <p>Value</p>
+                    <p>Amount</p>
+                    <p>Total</p>
+                    <p>Fee</p>
+                    <p>Return</p>
+                    <p>Profit %</p>
+                </div>
+
+                {dataExists ? 
+                <>
+                    <div className="info">
+                    <p>X</p>
+                    <p>06.05.2023</p>
+                    <p>1.553 €</p>
+                    <p>0.0251</p>
+                    <p>38.98 €</p>
+                    <p>0.04 €</p>
+                    <p>29.92 €</p>
+                    <p>3.61 %</p>
+                    </div>
+                </> 
+                : 
+                <>
+                    <p id="noData">Add a first entry</p>
+                </>
+                }
+
+                
+
+                
             </div>
         </div>
     )
