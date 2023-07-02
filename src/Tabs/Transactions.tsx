@@ -82,7 +82,7 @@ function Transactions() {
 
                 {addingEntry ? 
                 <div id="addingEntry">
-                    <div className="header">
+                    <div className="entryHeader">
                         <h4>Adding a new entry</h4>
                         <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
                     </div>
