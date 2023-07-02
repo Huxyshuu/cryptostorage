@@ -20,6 +20,7 @@
 @mixin coinStyle {
     color: $white;
     background-color: $main-dark;
+    font-size: 1rem;
     min-width: 5rem;
     width: 100%;
     height: 2rem;
@@ -119,6 +120,7 @@
     display:flex;
     flex-direction: column;
     margin-top: 1rem;
+    height: 75%;
 
     .titles {
         display:flex;
@@ -179,6 +181,97 @@
             cursor: pointer;
             color: $main-light;
             background-color: $white;
+        }
+    }
+
+    #addingEntry {
+        background-color: $sec-light;
+        border-radius: 0.5rem;
+        border: 0.2rem solid $main-dark;
+        height: 15rem;
+        margin-block: auto;
+
+        .header {
+            margin-inline: 1rem;
+
+            h4 {
+                margin-block: 0.5rem;
+                color: $white;
+                font-weight: 300;
+            }
+
+            .sellRed {
+                color: $soft-red;
+                font-weight: 500;
+            }
+        }
+
+        
+
+        .titles {
+            p {
+                &:first-of-type {
+                    border-top-left-radius: 0;
+                }
+    
+                &:last-of-type {
+                    border-top-right-radius: 0; 
+                }
+            }  
+        }
+
+        .info {
+
+            /* SQUARED TWO */   
+            #squaredTwo {
+                visibility: hidden;
+            }
+
+            .squaredTwo {
+                width: 5rem;
+                height: 2.125rem;
+                background: darken($white, 10%);
+                position: relative;
+            }
+
+            .squaredTwo label {
+                cursor: pointer;
+            }
+
+            .squaredTwo label:after {
+                opacity: 0;
+                content: 'X';
+                color: $soft-red;
+                position: absolute;
+                font-size: 2rem;
+                background: transparent;
+                left: 0;
+                width: 5rem;
+                text-align: center;
+            }
+
+            .squaredTwo label:hover::after {
+                filter: alpha(opacity=30);
+                opacity: 0.3;
+            }
+
+            .squaredTwo input[type=checkbox]:checked + label:after {
+                filter: alpha(opacity=100);
+                opacity: 1;
+            }
+
+            input {
+                @include coinStyle;
+                background-color: darken($white, 10%);
+                color: black;
+                border: 0;
+                border-left: 0.1rem solid $main-dark; 
+                width: 100%;
+    
+                &:last-of-type {
+                    border-bottom-right-radius: 0; 
+                }
+            }
         }
     }
 }

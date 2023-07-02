@@ -6,7 +6,8 @@ import upSolid from '@iconify/icons-teenyicons/up-solid';
 
 function Transactions() {
 
-    const [dataExists, setDataExists] = useState(true);
+    const [dataExists, setDataExists] = useState(false);
+    const [addingEntry, setAddingEntry] = useState(false);
 
     useEffect(() =>  {
         console.log(getDatabase());
@@ -63,21 +64,55 @@ function Transactions() {
                 {dataExists ? 
                 <>
                     <div className="info">
-                    <p>X</p>
-                    <p>06.05.2023</p>
-                    <p>1.553 €</p>
-                    <p>0.0251</p>
-                    <p>38.98 €</p>
-                    <p>0.04 €</p>
-                    <p>29.92 €</p>
-                    <p>3.61 %</p>
+                        <p>X</p>
+                        <p>06.05.2023</p>
+                        <p>1.553 €</p>
+                        <p>0.0251</p>
+                        <p>38.98 €</p>
+                        <p>0.04 €</p>
+                        <p>29.92 €</p>
+                        <p>3.61 %</p>
                     </div>
                 </> 
                 : 
                 <>
-                    <p id="noData">Add a first entry</p>
+                    <p id="noData" onClick={() => setAddingEntry(true)}>Add a first entry</p>
                 </>
                 }
+
+                {addingEntry ? 
+                <div id="addingEntry">
+                    <div className="header">
+                        <h4>Adding a new entry</h4>
+                        <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
+                    </div>
+                    <div className="titles">
+                        <p>Taxed</p>
+                        <p>Date</p>
+                        <p>Value</p>
+                        <p>Amount</p>
+                        <p>Total</p>
+                        <p>Fee</p>
+                        <p>Return</p>
+                        <p>Profit %</p>
+                    </div>
+                    <form action="" className="info"> 
+                            <div className="squaredTwo">
+                                <input type="checkbox" value="None" id="squaredTwo" name="check" />
+                                <label htmlFor="squaredTwo"></label>
+                            </div>
+                            <input type="text" />
+                            <input type="text" />
+                            <input type="text" />
+                            <input type="text" />
+                            <input type="text" />
+                            <input type="text" />
+                            <input type="text" />
+                        </form>
+                </div>
+                :
+                <>
+                </>}
 
                 
 
