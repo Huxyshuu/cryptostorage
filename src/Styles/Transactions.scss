@@ -182,13 +182,17 @@
             color: $main-light;
             background-color: $white;
         }
+
+        &:active {
+            background-color: darken($white,10%);
+        }
     }
 
     #addingEntry {
         background-color: $sec-light;
         border-radius: 0.5rem;
         border: 0.2rem solid $main-dark;
-        height: 15rem;
+        height: 11rem;
         margin-block: auto;
         width: 78vw;
 
@@ -279,6 +283,33 @@
                     border:1px solid $main-light;
                     box-shadow: 0 0 1rem $sec-light;
                     font-size: 1.5rem;
+                }
+            }
+        }
+
+        .addButton {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+
+            button {
+                @include buttonStyling;
+                color: black;
+                background-color: darken($white, 10%);
+                box-shadow: 0 0 0.2rem $main-dark;
+                font-size: 1rem;
+                font-weight: 400;
+
+                &:hover {
+                    cursor: pointer;
+                    color: $main-light;
+                    background-color: $white;
+                }
+                
+                &:active {
+                    background-color: darken($white,10%);
                 }
             }
         }

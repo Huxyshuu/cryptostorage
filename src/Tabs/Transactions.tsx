@@ -97,18 +97,21 @@ function Transactions() {
                         <p>Profit %</p>
                     </div>
                     <form action="" className="info"> 
-                            <div className="squaredTwo">
-                                <input type="checkbox" value="None" id="squaredTwo" name="check" />
-                                <label htmlFor="squaredTwo"></label>
-                            </div>
-                            <input type="text" id="date"/>
-                            <input type="text" id="value"/>
-                            <input type="text" id="amount"/>
-                            <input type="text" id="total"/>
-                            <input type="text" id="fee"/>
-                            <input type="text" id="return"/>
-                            <input type="text" id="profit"/>
-                        </form>
+                        <div className="squaredTwo">
+                            <input type="checkbox" value="None" id="squaredTwo" name="check" />
+                            <label htmlFor="squaredTwo"></label>
+                        </div>
+                        <input type="text" id="date"/>
+                        <input type="text" id="value"/>
+                        <input type="text" id="amount"/>
+                        <input type="text" id="total"/>
+                        <input type="text" id="fee"/>
+                        <input type="text" id="return"/>
+                        <input type="text" id="profit"/>
+                    </form>
+                    <div className="addButton">
+                        <button>Add</button>
+                    </div>
                 </div>
                 :
                 <>
