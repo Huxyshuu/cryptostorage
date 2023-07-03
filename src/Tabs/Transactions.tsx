@@ -13,12 +13,25 @@ function Transactions() {
         console.log(getDatabase());
     })
 
+    const addToDatabase = () => {
+        console.log("adding");
+
+        setAddingEntry(true);
+    }
+
+    const confirmAdd = () => {
+        console.log("added");
+
+        setAddingEntry(false);
+        setDataExists(true);
+    }
+
     return (
         <div className="content transactions">
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
-                    <button>Add</button>
+                    <button onClick={addToDatabase}>Add</button>
                     <button>Edit</button>
                     <button>Remove</button>
                 </div>
@@ -76,7 +89,7 @@ function Transactions() {
                 </> 
                 : 
                 <>
-                    <p id="noData" onClick={() => setAddingEntry(true)}>Add a first entry</p>
+                    <p id="noData" onClick={addToDatabase}>Add a first entry</p>
                 </>
                 }
 
@@ -110,7 +123,7 @@ function Transactions() {
                         <input type="text" id="profit"/>
                     </form>
                     <div className="addButton">
-                        <button>Add</button>
+                        <button onClick={confirmAdd}>Add</button>
                     </div>
                 </div>
                 :
