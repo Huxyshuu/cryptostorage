@@ -13,7 +13,7 @@ export function addDatabase(event: Event): void {
             const file = ev[0];
 
             if (fs.existsSync(`./src/Database/${file.name}`)) {
-                console.log("The file already exists. Please choose a different file.");
+                changeDatabase(event);
             } else {
                 fs.copyFile(file.path, `./src/Database/${file.name}`, (err) => {
                     if (err) {
