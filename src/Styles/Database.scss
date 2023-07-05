@@ -4,12 +4,16 @@
     display: flex;
     flex-direction: row;
     color: $white;
+    margin-block: 1.5rem;
 
     .text {
         background-color: $main-dark;
         padding: 0.5rem;
         min-width: 15rem;
         text-align: center;
+        line-height: 2rem;
+        height: 2rem;
+        margin: 0;
     }
 
     .current {
@@ -17,6 +21,8 @@
         padding: 0.5rem;
         min-width: 18rem;
         text-align: center;
+        margin: 0;
+        line-height: 2rem;
     }
 
     div {
@@ -25,6 +31,40 @@
         justify-content: center;
         align-items: center;
         margin-left: 1rem;
+    }
+
+    input {
+        background-color: $sec-light;
+        padding: 0.5rem;
+        min-width: 12rem;
+        text-align: center;
+        height: 2rem;
+        padding: 0;
+        outline: 0;
+        box-shadow: none;
+        margin: 0;
+        border: 0;
+        padding: 8px;
+
+        &[type="text"] {
+            box-shadow: 0 0 0.5rem $white inset;
+            color: $white;
+            font-size: 1rem;
+            max-width: 5rem;
+
+            &:focus {
+                box-shadow: 0 0 0.5rem $main-light inset;
+                background-color: lighten($sec-light, 10%);
+                font-size: 1.3rem;
+            }
+        }
+
+        &[type="submit"] {
+            @include buttonStyling;
+            height: 2.5rem;
+            margin-top: 0.25rem;
+            margin-left: 1rem;
+        }
     }
 }
 
@@ -53,6 +93,7 @@
 .database-info {
     background-color: $main-dark;
     margin: 1.2rem;
+    max-width: 32.5rem;
 
 
     p {
