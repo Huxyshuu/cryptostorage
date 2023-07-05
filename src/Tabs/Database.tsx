@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import 'Styles/Database.scss'
-import {createDatabase, addDatabase, changeDatabase, removeCurrentDatabase, saveData, loadData} from '../Scripts/db_functions.tsx';
+import {createDatabase, addDatabase, changeDatabase, removeCurrentDatabase, loadData} from '../Scripts/db_functions.tsx';
 
 function Database() {
 
   const [creatingNew, setCreatingNew] = useState(false);
 
-  const createNew = (event: Event) => {
+  const createNew = (event: React.FormEvent) => {
     event.preventDefault();
     if (event.target !== null) {
       const ev = (event.target as HTMLFormElement)[0];
@@ -29,7 +29,7 @@ function Database() {
         { creatingNew ? 
         <div className="database-current">
           <p className="text">New database name:</p>
-          <form onSubmit={createNew}>
+          <form onSubmit={(event: React.FormEvent<HTMLFormElement>): void => createNew(event)}>
             <input type="text" name="databaseName"/>
             <input type="submit" value="Create"/>
           </form>
@@ -48,10 +48,10 @@ function Database() {
           <button onClick={() => setCreatingNew(true)}>Create New</button>
           }
           <label htmlFor="database-file-add">Add Existing</label>
-          <input onChange={() => {addDatabase; setCreatingNew(false)}} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
+          <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {addDatabase(event); setCreatingNew(false)}} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
           <label htmlFor="database-file-change">Change</label>
-          <input onChange={() => {changeDatabase; setCreatingNew(false)}} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
-          <button onClick={() => {removeCurrentDatabase; setCreatingNew(false)}}>Remove</button>
+          <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {changeDatabase(event); setCreatingNew(false)}} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
+          <button onClick={() => {removeCurrentDatabase(); setCreatingNew(false)}}>Remove</button>
         </div>
         <div className="database-info">
           <p id="dateAdded">Date added: -</p>

@@ -6,7 +6,7 @@ const store = new Store();
 
 let currentDatabase = store.get("database.current");
 
-export function addDatabase(event: Event): void {
+export function addDatabase(event: React.ChangeEvent): void {
     if (event.target !== null) {
         const ev = (event.target as HTMLInputElement).files;
         if (ev !== null) {
@@ -36,7 +36,7 @@ export function addDatabase(event: Event): void {
     }
 }
 
-export function changeDatabase(event: Event): void {
+export function changeDatabase(event: React.ChangeEvent): void {
     
     if (event.target !== null) {
         const ev = (event.target as HTMLInputElement).files;
@@ -102,6 +102,26 @@ export function getDatabase(): string {
     return currentDatabase;
 }
 
+export function loadData() {
+    currentDatabase = store.get('database.current');
+
+    if (currentDatabase === undefined || currentDatabase === "None") {
+        removeCurrentDatabase();
+    } else {
+        const current = document.getElementById("currentDatabase");
+        if (current !== null) {
+            current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+        }
+        setTime();
+        setEdited(currentDatabase);
+        setSize(currentDatabase);
+    }
+}
+
+function saveData() {
+    store.set('database.current', currentDatabase)
+}
+
 function setTime(): void {
     const date = new Date().toLocaleDateString("fi-FI");
     // Check for null
@@ -141,23 +161,5 @@ function setSize(file: string): void {
     
 }
 
-export function saveData() {
-    store.set('database.current', currentDatabase)
-}
 
-export function loadData() {
-    currentDatabase = store.get('database.current');
-
-    if (currentDatabase === undefined || currentDatabase === "None") {
-        removeCurrentDatabase();
-    } else {
-        const current = document.getElementById("currentDatabase");
-        if (current !== null) {
-            current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
-        }
-        setTime();
-        setEdited(currentDatabase);
-        setSize(currentDatabase);
-    }
-}
 
