@@ -82,15 +82,16 @@ export function removeCurrentDatabase(): void {
     saveData();
 }
 
-/*
+
 export function createDatabase(name: string) {
-    const db = new sqlite3.Database('./src/Database/database1.db',
+    const databaseName = name.replace(" ", "_").trim();
+    const db = new sqlite3.Database(`./src/Database/${databaseName}.db`,
         (err) => {
             if (err) return console.error(err.message);
         });
 }
 
-
+/*
 export function createTable() {
     const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, short, value, amount, date, taxed)';
     db.run(sql);

@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import 'Styles/Database.scss'
-import {addDatabase, changeDatabase, removeCurrentDatabase, saveData, loadData} from '../Scripts/db_functions.tsx';
+import {createDatabase, addDatabase, changeDatabase, removeCurrentDatabase, saveData, loadData} from '../Scripts/db_functions.tsx';
 
 function Database() {
 
   const [creatingNew, setCreatingNew] = useState(false);
 
-  const createNew = () => {
-    setCreatingNew(false);
+  const createNew = (event: Event) => {
+    event.preventDefault();
+    if (event.target !== null) {
+      const ev = (event.target as HTMLFormElement)[0];
+      if (ev !== null) {
+        const newName = (ev as HTMLInputElement).value; 
+        createDatabase(newName);
+
+        setCreatingNew(false);
+      }
+    }
   }
   
   useEffect(() => {
@@ -20,8 +29,10 @@ function Database() {
         { creatingNew ? 
         <div className="database-current">
           <p className="text">New database name:</p>
-          <input type="text" />
-          <input type="submit" value="Create" onClick={createNew}/>
+          <form onSubmit={createNew}>
+            <input type="text" name="databaseName"/>
+            <input type="submit" value="Create"/>
+          </form>
         </div>
         :
         <div className="database-current">
