@@ -31,12 +31,16 @@ function Database() {
         }
         
         <div className="database-button">
+          { creatingNew ? 
+          <button onClick={() => setCreatingNew(false)}>Cancel</button>
+          :
           <button onClick={() => setCreatingNew(true)}>Create New</button>
+          }
           <label htmlFor="database-file-add">Add Existing</label>
-          <input onChange={addDatabase} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
+          <input onChange={() => {addDatabase; setCreatingNew(false)}} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
           <label htmlFor="database-file-change">Change</label>
-          <input onChange={changeDatabase} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
-          <button onClick={removeCurrentDatabase}>Remove</button>
+          <input onChange={() => {changeDatabase; setCreatingNew(false)}} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
+          <button onClick={() => {removeCurrentDatabase; setCreatingNew(false)}}>Remove</button>
         </div>
         <div className="database-info">
           <p id="dateAdded">Date added: -</p>
