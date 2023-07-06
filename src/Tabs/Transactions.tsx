@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
-import {getDatabase, addData, loadData} from '../Scripts/db_functions.tsx';
+import {getDatabase, addData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
@@ -8,10 +8,6 @@ function Transactions() {
 
     const [dataExists, setDataExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
-
-    useEffect(() => {
-        loadData();
-    })    
 
     const addToDatabase = () => {
         console.log("adding");

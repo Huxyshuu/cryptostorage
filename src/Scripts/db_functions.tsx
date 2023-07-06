@@ -51,7 +51,6 @@ export function changeDatabase(event: React.ChangeEvent): void {
             if (current !== null) current.innerHTML = file.name;
 
             openDatabase(file.name);
-            console.log(file.name);
         }
     }
 }
@@ -83,7 +82,26 @@ export function removeCurrentDatabase(): void {
     saveData();
 }
 
+export function openDatabase(name: string) {
+    let path = ""
+    if (name.includes(".db")) {
+        path = `./src/Database/${name}`;
+    } else {
+        path = `./src/Database/${name}.db`;
+    }
+    
+    db = new sqlite3.Database(path,
+        (err) => {
+            if (err) return console.error(err.message);
+        });
 
+    currentDatabase = path;
+    saveData();
+
+    return db
+}
+
+/*
 export function openDatabase(name: string) {
     const databaseName = name.replace(" ", "_").trim();
     let path = "";
@@ -100,11 +118,11 @@ export function openDatabase(name: string) {
 
     currentDatabase = path;
     saveData();
-    loadData();
 }
+*/
 
 export function getDatabase() {
-    return store.get("database.db");
+    return db;
 }
 
 export function createTable() {
@@ -125,8 +143,6 @@ export function addData(database, data: object) {
 
 export function loadData() {
     currentDatabase = store.get('database.current');
-    db = store.get('database.db');
-    console.log(db);
 
     if (currentDatabase === undefined || currentDatabase === "None") {
         removeCurrentDatabase();
@@ -134,12 +150,17 @@ export function loadData() {
         const current = document.getElementById("currentDatabase");
         if (current !== null) {
             if (currentDatabase.indexOf("/") == -1) {
-                current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+                current.innerHTML = fileName
+                db = openDatabase(fileName);
             } else {
-                current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
+                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
+                current.innerHTML = fileName
+                db = openDatabase(fileName);
             }
             
         }
+        
         setTime(currentDatabase);
         setEdited(currentDatabase);
         setSize(currentDatabase);
@@ -148,7 +169,6 @@ export function loadData() {
 
 function saveData() {
     store.set('database.current', currentDatabase);
-    store.set('database.db', db);
 }
 
 function setTime(file: string): void {
