@@ -5,6 +5,7 @@ const Store = await require('electron-store');
 const store = new Store();
 
 let currentDatabase = store.get("database.current");
+let db: { run: (arg0: string) => void; } | null = null;
 
 export function addDatabase(event: React.ChangeEvent): void {
     if (event.target !== null) {
@@ -25,7 +26,7 @@ export function addDatabase(event: React.ChangeEvent): void {
                         const current = document.getElementById("currentDatabase");
                         if (current !== null) current.innerHTML = file.name;
                         
-                        setTime();
+                        setTime(file.path);
                         setSize(file.path);
                         setEdited(file.path);
                         saveData();
@@ -48,10 +49,8 @@ export function changeDatabase(event: React.ChangeEvent): void {
             const current = document.getElementById("currentDatabase");
             if (current !== null) current.innerHTML = file.name;
 
-            setTime();
-            setSize(file.path);
-            setEdited(file.path);
             saveData();
+            loadData();
         }
     }
 }
@@ -65,7 +64,7 @@ export function removeCurrentDatabase(): void {
     currentDatabase = "None";
     if (current !== null && dateAdded !== null && fileSize !== null && lastEdited !== null) {
         current.innerHTML = "None";
-        dateAdded.innerHTML = "Date added: -"
+        dateAdded.innerHTML = "Date created: -"
         fileSize.innerHTML = "File size: -"
         lastEdited.innerHTML = `Last edited: -`;
     }
@@ -85,18 +84,23 @@ export function removeCurrentDatabase(): void {
 
 export function createDatabase(name: string) {
     const databaseName = name.replace(" ", "_").trim();
-    const db = new sqlite3.Database(`./src/Database/${databaseName}.db`,
+    const path = `./src/Database/${databaseName}.db`;
+    db = new sqlite3.Database(path,
         (err) => {
             if (err) return console.error(err.message);
         });
+
+    const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
+    if (db !== null) {
+        db.run(sql);
+    }
+
+    currentDatabase = path;
+
+    saveData();
+    loadData();
 }
 
-/*
-export function createTable() {
-    const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, short, value, amount, date, taxed)';
-    db.run(sql);
-}
-*/
 
 export function getDatabase(): string {
     return currentDatabase;
@@ -110,9 +114,14 @@ export function loadData() {
     } else {
         const current = document.getElementById("currentDatabase");
         if (current !== null) {
-            current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+            if (currentDatabase.indexOf("/") == -1) {
+                current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+            } else {
+                current.innerHTML = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
+            }
+            
         }
-        setTime();
+        setTime(currentDatabase);
         setEdited(currentDatabase);
         setSize(currentDatabase);
     }
@@ -122,12 +131,12 @@ function saveData() {
     store.set('database.current', currentDatabase)
 }
 
-function setTime(): void {
-    const date = new Date().toLocaleDateString("fi-FI");
+function setTime(file: string): void {
+    const date = fs.statSync(file).birthtime.toLocaleDateString("fi-FI");
     // Check for null
     const dateAdded = document.getElementById("dateAdded");
     if (dateAdded !== null) {
-        dateAdded.innerHTML = `Date added: ${date}`;
+        dateAdded.innerHTML = `Date created: ${date}`;
     } else {
         alert("Oops! SetTime failed")
     }
