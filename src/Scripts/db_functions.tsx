@@ -94,6 +94,8 @@ export function openDatabase(name: string) {
         (err) => {
             if (err) return console.error(err.message);
         });
+    
+    createTable();
 
     currentDatabase = path;
     saveData();
@@ -126,7 +128,7 @@ export function getDatabase() {
 }
 
 export function createTable() {
-    const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
+    const sql = 'CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
     if (db !== null) {
         db.run(sql);
     }
