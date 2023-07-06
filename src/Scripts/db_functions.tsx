@@ -5,7 +5,8 @@ const Store = await require('electron-store');
 const store = new Store();
 
 let currentDatabase = store.get("database.current");
-let db: { run: (arg0: string) => void; } | null = null;
+
+let db = store.get("database.db");
 
 export function addDatabase(event: React.ChangeEvent): void {
     if (event.target !== null) {
@@ -49,8 +50,8 @@ export function changeDatabase(event: React.ChangeEvent): void {
             const current = document.getElementById("currentDatabase");
             if (current !== null) current.innerHTML = file.name;
 
-            saveData();
-            loadData();
+            openDatabase(file.name);
+            console.log(file.name);
         }
     }
 }
@@ -62,6 +63,7 @@ export function removeCurrentDatabase(): void {
     const lastEdited = document.getElementById("lastEdited");
 
     currentDatabase = "None";
+    db = null;
     if (current !== null && dateAdded !== null && fileSize !== null && lastEdited !== null) {
         current.innerHTML = "None";
         dateAdded.innerHTML = "Date created: -"
@@ -82,32 +84,49 @@ export function removeCurrentDatabase(): void {
 }
 
 
-export function createDatabase(name: string) {
+export function openDatabase(name: string) {
     const databaseName = name.replace(" ", "_").trim();
-    const path = `./src/Database/${databaseName}.db`;
+    let path = "";
+    if (databaseName.includes(".db")) {
+        path = `./src/Database/${databaseName}`;
+    } else {
+        path = `./src/Database/${databaseName}.db`;
+    }
+    
     db = new sqlite3.Database(path,
         (err) => {
             if (err) return console.error(err.message);
         });
 
-    const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
-    if (db !== null) {
-        db.run(sql);
-    }
-
     currentDatabase = path;
-
     saveData();
     loadData();
 }
 
+export function getDatabase() {
+    return store.get("database.db");
+}
 
-export function getDatabase(): string {
-    return currentDatabase;
+export function createTable() {
+    const sql = 'CREATE TABLE transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
+    if (db !== null) {
+        db.run(sql);
+    }
+}
+
+export function addData(database, data: object) {
+    const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", true, "2023-07-06", 1422, 0.2)'
+    if (database !== null) {
+        database.run(sql, [], (err) => {
+            if (err) return console.error(err.message);
+        })
+    }
 }
 
 export function loadData() {
     currentDatabase = store.get('database.current');
+    db = store.get('database.db');
+    console.log(db);
 
     if (currentDatabase === undefined || currentDatabase === "None") {
         removeCurrentDatabase();
@@ -128,11 +147,18 @@ export function loadData() {
 }
 
 function saveData() {
-    store.set('database.current', currentDatabase)
+    store.set('database.current', currentDatabase);
+    store.set('database.db', db);
 }
 
 function setTime(file: string): void {
-    const date = fs.statSync(file).birthtime.toLocaleDateString("fi-FI");
+    let date = ""
+    try {
+        date = fs.statSync(file).birthtime.toLocaleDateString("fi-FI");
+    } catch (err) {
+        console.log(err.message);
+        return
+    }
     // Check for null
     const dateAdded = document.getElementById("dateAdded");
     if (dateAdded !== null) {
@@ -143,17 +169,29 @@ function setTime(file: string): void {
 }
 
 function setEdited(file: string): void {
-    const dateEdited = fs.statSync(file).mtime.toLocaleDateString("fi-FI");
+    let dateCreated = ""
+    try {
+        dateCreated = fs.statSync(file).mtime.toLocaleDateString("fi-FI");
+    } catch (err) {
+        console.log(err.message);
+        return
+    }
     const lastEdited = document.getElementById("lastEdited");
     if (lastEdited !== null) {
-        lastEdited.innerHTML = `Last edited: ${dateEdited}`;
+        lastEdited.innerHTML = `Last edited: ${dateCreated}`;
     } else {
         alert("Oops! lastEdited failed")
     }
 }
 
 function setSize(file: string): void {
-    const sizeInBytes = fs.statSync(file).size;
+    let sizeInBytes = 0;
+    try {
+        sizeInBytes = fs.statSync(file).size;
+    } catch (err) {
+        console.log(err.message);
+        return
+    }
     const sizeInKB = sizeInBytes / 1024;
     const sizeInMB = sizeInKB / 1024;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import 'Styles/Database.scss'
-import {createDatabase, addDatabase, changeDatabase, removeCurrentDatabase, loadData} from '../Scripts/db_functions.tsx';
+import {openDatabase, addDatabase, changeDatabase, removeCurrentDatabase, loadData} from '../Scripts/db_functions.tsx';
 
 function Database() {
 
@@ -12,7 +12,7 @@ function Database() {
       const ev = (event.target as HTMLFormElement)[0];
       if (ev !== null) {
         const newName = (ev as HTMLInputElement).value; 
-        createDatabase(newName);
+        openDatabase(newName);
 
         setCreatingNew(false);
       }
