@@ -15,8 +15,10 @@ function Transactions() {
         setAddingEntry(true);
     }
 
-    const confirmAdd = () => {
+    const confirmAdd = (event: React.FormEvent) => {
+        event.preventDefault();
         console.log("added");
+        console.log(event);
         addData(getDatabase(), {});
 
         setAddingEntry(false);
@@ -106,7 +108,7 @@ function Transactions() {
                         <p>Return</p>
                         <p>Profit %</p>
                     </div>
-                    <form action="" className="info"> 
+                    <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmAdd(e)}} className="info"> 
                         <div className="squaredTwo">
                             <input type="checkbox" value="None" id="squaredTwo" name="check" />
                             <label htmlFor="squaredTwo"></label>
@@ -114,13 +116,13 @@ function Transactions() {
                         <input type="text" id="date"/>
                         <input type="text" id="value"/>
                         <input type="text" id="amount"/>
-                        <input type="text" id="total"/>
-                        <input type="text" id="fee"/>
-                        <input type="text" id="return"/>
-                        <input type="text" id="profit"/>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
                     </form>
                     <div className="addButton">
-                        <button onClick={confirmAdd}>Add</button>
+                        <input type="submit" form="addForm" value="Add"/>
                     </div>
                 </div>
                 :
