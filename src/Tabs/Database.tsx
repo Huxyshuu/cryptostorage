@@ -12,7 +12,7 @@ function Database() {
       const ev = (event.target as HTMLFormElement)[0];
       if (ev !== null) {
         const newName = (ev as HTMLInputElement).value; 
-        openDatabase(newName);
+        openDatabase(`./src/Database/${newName}`);
 
         setCreatingNew(false);
       }

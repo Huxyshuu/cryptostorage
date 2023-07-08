@@ -5,8 +5,13 @@ const Store = await require('electron-store');
 const store = new Store();
 
 let currentDatabase = store.get("database.current");
+console.log(currentDatabase);
+let db: any = null;
+if (currentDatabase) {
+    db = openDatabase(currentDatabase);
+}
 
-let db = store.get("database.db");
+
 
 export function addDatabase(event: React.ChangeEvent): void {
     if (event.target !== null) {
@@ -23,6 +28,7 @@ export function addDatabase(event: React.ChangeEvent): void {
                     }
                     else {
                         currentDatabase = `./src/Database/${file.name}`
+                        db = openDatabase(currentDatabase)
     
                         const current = document.getElementById("currentDatabase");
                         if (current !== null) current.innerHTML = file.name;
@@ -50,7 +56,7 @@ export function changeDatabase(event: React.ChangeEvent): void {
             const current = document.getElementById("currentDatabase");
             if (current !== null) current.innerHTML = file.name;
 
-            openDatabase(file.name);
+            openDatabase(currentDatabase);
         }
     }
 }
@@ -82,13 +88,7 @@ export function removeCurrentDatabase(): void {
     saveData();
 }
 
-export function openDatabase(name: string) {
-    let path = ""
-    if (name.includes(".db")) {
-        path = `./src/Database/${name}`;
-    } else {
-        path = `./src/Database/${name}.db`;
-    }
+export function openDatabase(path: string) {
     
     db = new sqlite3.Database(path,
         (err) => {
@@ -134,12 +134,15 @@ export function createTable() {
     }
 }
 
-export function addData(database, data: object) {
-    const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", true, "2023-07-06", 1422, 0.2)'
+export function addData(database: any, data: object) {
+    const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
+    const params = [data.taxed.checked, data.date.value, data.value.value, data.amount.value]
     if (database !== null) {
-        database.run(sql, [], (err) => {
+        database.all(sql, params, (err) => {
             if (err) return console.error(err.message);
         })
+    } else {
+        console.log("No database selected");
     }
 }
 
@@ -152,13 +155,15 @@ export function loadData() {
         const current = document.getElementById("currentDatabase");
         if (current !== null) {
             if (currentDatabase.indexOf("/") == -1) {
+                db = openDatabase(currentDatabase);
                 const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
                 current.innerHTML = fileName
-                db = openDatabase(fileName);
+                
             } else {
+                db = openDatabase(currentDatabase);
                 const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
                 current.innerHTML = fileName
-                db = openDatabase(fileName);
+                
             }
             
         }

@@ -19,7 +19,12 @@ function Transactions() {
         event.preventDefault();
         console.log("added");
         console.log(event);
-        addData(getDatabase(), {});
+        addData(getDatabase(), {
+            taxed: (event.target as HTMLFormElement)[0],
+            date: (event.target as HTMLFormElement)[1],
+            value: (event.target as HTMLFormElement)[2],
+            amount: (event.target as HTMLFormElement)[3],
+        });
 
         setAddingEntry(false);
         setDataExists(true);
