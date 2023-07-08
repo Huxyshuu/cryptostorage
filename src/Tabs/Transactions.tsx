@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
-import {getDatabase, addData} from '../Scripts/db_functions.tsx';
+import {getDatabase, insertData, queryData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
@@ -8,6 +8,10 @@ function Transactions() {
 
     const [dataExists, setDataExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
+
+    useEffect(() => {
+        queryData(getDatabase())
+    })
 
     const addToDatabase = () => {
         console.log("adding");
@@ -19,7 +23,7 @@ function Transactions() {
         event.preventDefault();
         console.log("added");
         console.log(event);
-        addData(getDatabase(), {
+        insertData(getDatabase(), {
             taxed: (event.target as HTMLFormElement)[0],
             date: (event.target as HTMLFormElement)[1],
             value: (event.target as HTMLFormElement)[2],

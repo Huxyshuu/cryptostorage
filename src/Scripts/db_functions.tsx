@@ -88,6 +88,34 @@ export function removeCurrentDatabase(): void {
     saveData();
 }
 
+export function loadData() {
+    currentDatabase = store.get('database.current');
+
+    if (currentDatabase === undefined || currentDatabase === "None") {
+        removeCurrentDatabase();
+    } else {
+        const current = document.getElementById("currentDatabase");
+        if (current !== null) {
+            if (currentDatabase.indexOf("/") == -1) {
+                db = openDatabase(currentDatabase);
+                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
+                current.innerHTML = fileName
+                
+            } else {
+                db = openDatabase(currentDatabase);
+                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
+                current.innerHTML = fileName
+                
+            }
+            
+        }
+        
+        setTime(currentDatabase);
+        setEdited(currentDatabase);
+        setSize(currentDatabase);
+    }
+}
+
 export function openDatabase(path: string) {
     
     db = new sqlite3.Database(path,
@@ -134,7 +162,7 @@ export function createTable() {
     }
 }
 
-export function addData(database: any, data: object) {
+export function insertData(database: any, data: object) {
     const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
     const params = [data.taxed.checked, data.date.value, data.value.value, data.amount.value]
     if (database !== null) {
@@ -146,33 +174,23 @@ export function addData(database: any, data: object) {
     }
 }
 
-export function loadData() {
-    currentDatabase = store.get('database.current');
+export function queryData(database: any) {
+    let queriedData = [];
 
-    if (currentDatabase === undefined || currentDatabase === "None") {
-        removeCurrentDatabase();
+    const sql = 'SELECT * FROM transactions'
+    if (database !== null) {
+        database.all(sql, [], (err, rows) => {
+            if (err) return console.error(err.message);
+            rows.forEach(row => queriedData.unshift(row))
+        })
     } else {
-        const current = document.getElementById("currentDatabase");
-        if (current !== null) {
-            if (currentDatabase.indexOf("/") == -1) {
-                db = openDatabase(currentDatabase);
-                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("\\") + 1)}`
-                current.innerHTML = fileName
-                
-            } else {
-                db = openDatabase(currentDatabase);
-                const fileName = `${currentDatabase.substring(currentDatabase.lastIndexOf("/") + 1)}`
-                current.innerHTML = fileName
-                
-            }
-            
-        }
-        
-        setTime(currentDatabase);
-        setEdited(currentDatabase);
-        setSize(currentDatabase);
+        console.log("No database selected");
     }
+    
+    console.log(queriedData);
 }
+
+
 
 function saveData() {
     store.set('database.current', currentDatabase);
