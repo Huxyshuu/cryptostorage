@@ -164,7 +164,7 @@ export function createTable() {
 
 export function insertData(database: any, data: object) {
     const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
-    const params = [data.taxed.checked, data.date.value, data.value.value, data.amount.value]
+    const params = [data.taxed.checked, data.date.value, parseInt(data.value.value), parseInt(data.amount.value)]
     if (database !== null) {
         database.all(sql, params, (err) => {
             if (err) return console.error(err.message);
