@@ -56,6 +56,7 @@ export function changeDatabase(event: React.ChangeEvent): void {
             if (current !== null) current.innerHTML = file.name;
 
             openDatabase(currentDatabase);
+            loadData();
         }
     }
 }

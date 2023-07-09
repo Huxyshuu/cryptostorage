@@ -122,7 +122,7 @@
     margin-top: 1rem;
     height: 75%;
     width: 101%;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-radius: 0.5rem;
 
     &::-webkit-scrollbar {
@@ -234,7 +234,7 @@
         border: 0.2rem solid $main-dark;
         height: 11rem;
         margin-block: auto;
-        width: 80vw;
+        width: 78vw;
 
         .entryHeader {
             display: flex;
