@@ -5,7 +5,6 @@ const Store = await require('electron-store');
 const store = new Store();
 
 let currentDatabase = store.get("database.current");
-console.log(currentDatabase);
 let db: any = null;
 if (currentDatabase) {
     db = openDatabase(currentDatabase);
@@ -152,6 +151,9 @@ export function openDatabase(name: string) {
 */
 
 export function getDatabase() {
+    if (currentDatabase === undefined || currentDatabase === "None") {
+        db = null;
+    }
     return db;
 }
 

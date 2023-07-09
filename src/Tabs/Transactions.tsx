@@ -7,6 +7,7 @@ import upSolid from '@iconify/icons-teenyicons/up-solid';
 function Transactions() {
 
     const [dataExists, setDataExists] = useState(false);
+    const [databaseExists, setDatabaseExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
     const [data, setData] = useState([{}]);
 
@@ -48,12 +49,14 @@ function Transactions() {
           if (query.length > 0) {
             setData(query);
             setDataExists(true);
+            setDatabaseExists(true)
           } else {
             setDataExists(false);
+            setDatabaseExists(true)
           }
         } catch (error) {
-          console.error(error);
           setDataExists(false);
+          setDatabaseExists(false);
         }
       };
 
@@ -144,7 +147,7 @@ function Transactions() {
                 </> 
                 : 
                 <>
-                    <p id="noData" onClick={addToDatabase}>Add a first entry</p>
+                    {databaseExists ? <p id="noData" onClick={addToDatabase}>Add a first entry</p> : <p id="noData" onClick={addToDatabase}>Add a database</p>}
                 </>
                 }
 
