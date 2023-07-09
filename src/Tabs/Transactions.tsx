@@ -11,24 +11,34 @@ function Transactions() {
     const [data, setData] = useState([{}]);
 
     const addToDatabase = () => {
-        console.log("adding");
-
         setAddingEntry(true);
     }
 
-    const confirmAdd = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log("added");
-        console.log(event);
-        insertData(getDatabase(), {
-            taxed: (event.target as HTMLFormElement)[0],
-            date: (event.target as HTMLFormElement)[1],
-            value: (event.target as HTMLFormElement)[2],
-            amount: (event.target as HTMLFormElement)[3],
-        });
+    interface TransactionData {
+        taxed: { checked: boolean };
+        date: { value: string };
+        value: { value: string };
+        amount: { value: string };
+      }
 
-        setAddingEntry(false);
-        setDataExists(true);
+    const confirmAdd = async (event: React.FormEvent) => {
+        try {
+            event.preventDefault();
+            await insertData(getDatabase(), {
+                taxed: (event.target as HTMLFormElement)[0],
+                date: (event.target as HTMLFormElement)[1],
+                value: (event.target as HTMLFormElement)[2],
+                amount: (event.target as HTMLFormElement)[3],
+            });
+
+            setAddingEntry(false);
+            setDataExists(true);
+            renderData()
+        } catch (error) {
+            console.error(error)
+            setDataExists(false);
+            setAddingEntry(false);
+        }
     }
 
     const renderData = async () => {
@@ -36,7 +46,7 @@ function Transactions() {
           const query = await queryData(getDatabase());
           console.log(query);
           
-          if (query) {
+          if (query.length > 0) {
             setData(query);
             setDataExists(true);
           } else {
@@ -105,18 +115,19 @@ function Transactions() {
                     {
                         data.map((transaction, index) => {
 
-                            console.log(transaction.taxed);
-                            const total = parseInt(transaction.value) * parseInt(transaction.amount)
+                            const total = parseFloat(transaction.value) * parseFloat(transaction.amount)
                             const fee = total * 0.001
+                            const value = transaction.value;
+                            const amount = transaction.amount;
 
                             return (
-                            <div className="info" key={index+"-transaction"}>
+                            <div className={ index == data.length - 1 ? "info roundedCorners" : "info"} key={index+"-transaction"}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p>{transaction.date}</p>
-                                <p>{transaction.value}</p>
-                                <p>{transaction.amount}</p>
-                                <p>{total} €</p>
-                                <p>{fee} €</p>
+                                <p>{value.toFixed(2)} €</p>
+                                <p>{amount.toFixed(2)}</p>
+                                <p>{total.toFixed(2)} €</p>
+                                <p>{fee.toFixed(2)} €</p>
                                 <p>- €</p>
                                 <p>- %</p>
                             </div>

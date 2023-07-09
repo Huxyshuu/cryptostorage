@@ -162,16 +162,35 @@ export function createTable() {
     }
 }
 
-export function insertData(database: any, data: object) {
-    const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
-    const params = [data.taxed.checked, data.date.value, parseInt(data.value.value), parseInt(data.amount.value)]
-    if (database !== null) {
-        database.all(sql, params, (err) => {
-            if (err) return console.error(err.message);
-        })
-    } else {
-        console.log("No database selected");
-    }
+interface TransactionData {
+    taxed: { checked: boolean };
+    date: { value: string };
+    value: { value: string };
+    amount: { value: string };
+  }
+
+export function insertData(database: any, data: TransactionData): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
+        const params = [
+            data.taxed.checked, 
+            data.date.value, 
+            parseFloat(data.value.value), 
+            parseFloat(data.amount.value)
+        ]
+
+        if (database !== null) {
+            database.all(sql, params, (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            })
+        } else {
+            reject(new Error("No database selected"));
+        }
+    });
 }
 
 export function queryData(database: any): Promise<object[]> {

@@ -154,20 +154,27 @@
             border-left: 0.1rem solid $main-dark;
 
             &:first-of-type {
-                border-bottom-left-radius: 0.5rem; 
                 width: 2rem;
                 border: none;
                 color: $soft-red;
                 font-size: 2rem;
             }
 
+            
+        }  
+    }
+    
+    .roundedCorners {
+        p {
+            &:first-of-type {
+                border-bottom-left-radius: 0.5rem; 
+            }
+
             &:last-of-type {
                 border-bottom-right-radius: 0.5rem; 
             }
-        }  
-        
-        
-    }
+        }
+    }  
 
     #noData {
         @include coinStyle;
