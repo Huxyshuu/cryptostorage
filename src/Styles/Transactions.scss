@@ -121,6 +121,7 @@
     flex-direction: column;
     margin-top: 1rem;
     height: 75%;
+    overflow-y: scroll;
 
     .titles {
         display:flex;
@@ -174,7 +175,14 @@
                 border-bottom-right-radius: 0.5rem; 
             }
         }
-    }  
+    } 
+    
+    .sold {
+        p {
+            color: $soft-red;
+            background-color: $light-red;
+        }
+    }
 
     #noData {
         @include coinStyle;

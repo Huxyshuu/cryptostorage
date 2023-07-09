@@ -44,7 +44,6 @@ function Transactions() {
     const renderData = async () => {
         try {
           const query = await queryData(getDatabase());
-          console.log(query);
           
           if (query.length > 0) {
             setData(query);
@@ -114,14 +113,22 @@ function Transactions() {
                 <>
                     {
                         data.map((transaction, index) => {
-
-                            const total = parseFloat(transaction.value) * parseFloat(transaction.amount)
-                            const fee = total * 0.001
-                            const value = transaction.value;
-                            const amount = transaction.amount;
+                            let value = 0
+                            let amount = 0
+                            let total = 0                               
+                            let fee = 0
+                            try {
+                                value = parseFloat(transaction.value);
+                                amount = parseFloat(transaction.amount);
+                                total = transaction.value * transaction.amount
+                                fee = total * 0.001
+                            } catch(err) {
+                                console.log(err);
+                            }
+                            
 
                             return (
-                            <div className={ index == data.length - 1 ? "info roundedCorners" : "info"} key={index+"-transaction"}>
+                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""}`} key={index+"-transaction"}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p>{transaction.date}</p>
                                 <p>{value.toFixed(2)} €</p>
