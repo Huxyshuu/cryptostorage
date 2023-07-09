@@ -8,10 +8,7 @@ function Transactions() {
 
     const [dataExists, setDataExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
-
-    useEffect(() => {
-        queryData(getDatabase())
-    })
+    const [data, setData] = useState([{}]);
 
     const addToDatabase = () => {
         console.log("adding");
@@ -33,6 +30,22 @@ function Transactions() {
         setAddingEntry(false);
         setDataExists(true);
     }
+
+    const renderData = () => {
+        const query = queryData(getDatabase())
+        console.log(query);
+        if (query) {
+            setData(query)
+            setDataExists(true);
+        } else {
+            setDataExists(false)
+        }
+        
+    }
+
+    useEffect(() => {
+        renderData();
+    }, [])
 
     return (
         <div className="content transactions">
@@ -84,16 +97,27 @@ function Transactions() {
 
                 {dataExists ? 
                 <>
-                    <div className="info">
-                        <p>X</p>
-                        <p>06.05.2023</p>
-                        <p>1.553 €</p>
-                        <p>0.0251</p>
-                        <p>38.98 €</p>
-                        <p>0.04 €</p>
-                        <p>29.92 €</p>
-                        <p>3.61 %</p>
-                    </div>
+                    {
+                        data.map((transaction, index) => {
+
+                            console.log(transaction.taxed);
+                            const total = parseInt(transaction.value) * parseInt(transaction.amount)
+                            const fee = total * 0.001
+
+                            return (
+                            <div className="info" key={index+"-transaction"}>
+                                <p>{transaction.taxed ? "X" : ""}</p>
+                                <p>{transaction.date}</p>
+                                <p>{transaction.value}</p>
+                                <p>{transaction.amount}</p>
+                                <p>{total} €</p>
+                                <p>{fee} €</p>
+                                <p>- €</p>
+                                <p>- %</p>
+                            </div>
+                            )
+                        })
+                    }
                 </> 
                 : 
                 <>

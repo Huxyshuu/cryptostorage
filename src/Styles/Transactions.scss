@@ -189,12 +189,14 @@
     }
 
     #addingEntry {
+        position: absolute;
+        top: 65vh;
         background-color: $sec-light;
         border-radius: 0.5rem;
         border: 0.2rem solid $main-dark;
         height: 11rem;
         margin-block: auto;
-        width: 78vw;
+        width: 80vw;
 
         .entryHeader {
             display: flex;

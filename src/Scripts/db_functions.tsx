@@ -175,7 +175,7 @@ export function insertData(database: any, data: object) {
 }
 
 export function queryData(database: any) {
-    let queriedData = [];
+    const queriedData: object[] = [];
 
     const sql = 'SELECT * FROM transactions'
     if (database !== null) {
@@ -187,7 +187,7 @@ export function queryData(database: any) {
         console.log("No database selected");
     }
     
-    console.log(queriedData);
+    return queriedData;
 }
 
 
