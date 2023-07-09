@@ -4,7 +4,11 @@ import {getDatabase, insertData, queryData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
-function Transactions() {
+interface props {
+    setTab: React.Dispatch<React.SetStateAction<string>>
+}
+
+function Transactions({setTab}:props) {
 
     const [dataExists, setDataExists] = useState(false);
     const [databaseExists, setDatabaseExists] = useState(false);
@@ -58,7 +62,11 @@ function Transactions() {
           setDataExists(false);
           setDatabaseExists(false);
         }
-      };
+    };
+
+    const goToDatabase = () => {
+        setTab("database")
+    }
 
     useEffect(() => {
         renderData();
@@ -147,7 +155,8 @@ function Transactions() {
                 </> 
                 : 
                 <>
-                    {databaseExists ? <p id="noData" onClick={addToDatabase}>Add a first entry</p> : <p id="noData" onClick={addToDatabase}>Add a database</p>}
+                    {databaseExists ? <p id="noData" onClick={addToDatabase}>Add a first entry</p>
+                    : <p id="noData" onClick={goToDatabase}>Add a database</p>}
                 </>
                 }
 

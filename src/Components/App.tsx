@@ -10,7 +10,7 @@ function App() {
 
   const tabs = {
     overview: <Overview />,
-    transactions: <Transactions />,
+    transactions: <Transactions setTab={setTab}/>,
     storage: <h1>Storage 🚧</h1>,
     database: <Database />,
     market: <h1>Market 🚧</h1>,
