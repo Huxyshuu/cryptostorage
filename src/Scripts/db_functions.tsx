@@ -174,21 +174,25 @@ export function insertData(database: any, data: object) {
     }
 }
 
-export function queryData(database: any) {
-    const queriedData: object[] = [];
-
-    const sql = 'SELECT * FROM transactions'
-    if (database !== null) {
+export function queryData(database: any): Promise<object[]> {
+    return new Promise<object[]>((resolve, reject) => {
+      const queriedData: object[] = [];
+      const sql = 'SELECT * FROM transactions';
+  
+      if (database !== null) {
         database.all(sql, [], (err, rows) => {
-            if (err) return console.error(err.message);
-            rows.forEach(row => queriedData.unshift(row))
-        })
-    } else {
-        console.log("No database selected");
-    }
-    
-    return queriedData;
-}
+          if (err) {
+            reject(err);
+          } else {
+            rows.forEach(row => queriedData.unshift(row));
+            resolve(queriedData);
+          }
+        });
+      } else {
+        reject(new Error("No database selected"));
+      }
+    });
+  }
 
 
 

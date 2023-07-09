@@ -31,17 +31,22 @@ function Transactions() {
         setDataExists(true);
     }
 
-    const renderData = () => {
-        const query = queryData(getDatabase())
-        console.log(query);
-        if (query) {
-            setData(query)
+    const renderData = async () => {
+        try {
+          const query = await queryData(getDatabase());
+          console.log(query);
+          
+          if (query) {
+            setData(query);
             setDataExists(true);
-        } else {
-            setDataExists(false)
+          } else {
+            setDataExists(false);
+          }
+        } catch (error) {
+          console.error(error);
+          setDataExists(false);
         }
-        
-    }
+      };
 
     useEffect(() => {
         renderData();
