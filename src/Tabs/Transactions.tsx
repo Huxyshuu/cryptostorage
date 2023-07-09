@@ -161,6 +161,7 @@ function Transactions() {
                     </form>
                     <div className="addButton">
                         <input type="submit" form="addForm" value="Add"/>
+                        <button onClick={() => setAddingEntry(false)}>Cancel</button>
                     </div>
                 </div>
                 :

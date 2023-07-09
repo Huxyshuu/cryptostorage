@@ -308,13 +308,14 @@
             align-items: center;
             margin-top: 1rem;
 
-            input {
+            input, button {
                 @include buttonStyling;
                 color: black;
                 background-color: darken($white, 10%);
                 box-shadow: 0 0 0.2rem $main-dark;
                 font-size: 1rem;
                 font-weight: 400;
+                margin-inline: 2rem;
 
                 &:hover {
                     cursor: pointer;
