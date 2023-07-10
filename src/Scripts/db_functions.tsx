@@ -45,18 +45,24 @@ export function addDatabase(event: React.ChangeEvent): void {
 
 export function changeDatabase(event: React.ChangeEvent): void {
     
-    if (event.target !== null) {
+    if (event.target !== null || event.target !== undefined) {
         const ev = (event.target as HTMLInputElement).files;
-        if (ev !== null) {
+        if (ev !== null || ev !== undefined) {
             const file = ev[0];
 
-            currentDatabase = `${file.path}`
+            if (file.path.includes(".db")) {
+                currentDatabase = `${file.path}`
 
-            const current = document.getElementById("currentDatabase");
-            if (current !== null) current.innerHTML = file.name;
+                const current = document.getElementById("currentDatabase");
+                if (current !== null) current.innerHTML = file.name;
 
-            openDatabase(currentDatabase);
-            loadData();
+                openDatabase(currentDatabase);
+                loadData();
+            } else {
+                console.log("Please choose a database (.db) file!");
+            }
+
+            
         }
     }
 }
