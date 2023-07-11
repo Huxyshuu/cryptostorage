@@ -88,7 +88,7 @@ function Transactions({setTab}:props) {
                 <div>
                     <button onClick={addToDatabase}>Add</button>
                     <button>Edit</button>
-                    <button onClick={activateRemove}>Remove</button>
+                    <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
                 </div>
             </div>
             
@@ -150,7 +150,7 @@ function Transactions({setTab}:props) {
                             
 
                             return (
-                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""}`} 
+                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive ? "hoverGray" : ""}`} 
                             key={index+"-transaction"}
                             onClick={ removeActive ? () => removeEntry(transaction.id) : () => {console.log("Hi")}}>
                                 <p>{transaction.taxed ? "X" : ""}</p>

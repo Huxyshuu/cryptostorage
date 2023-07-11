@@ -13,7 +13,13 @@
         button {
             @include buttonStyling;
             margin-inline: 0.2rem;
+
         }
+
+        .grayed {
+                background-color: $grey;
+                color: white;
+            }
     }   
 }
 
@@ -183,10 +189,20 @@
                 color: $soft-red;
                 font-size: 2rem;
             }
-
-            
         }  
     }
+
+    .hoverGray {
+        &:hover p {
+            background-color: darken($white, 20%);
+            cursor: pointer;
+            height: 1.95rem;
+            border-bottom: $main-light 0.1rem solid;
+        }
+        
+    }
+
+    
     
     .roundedCorners {
         p {
