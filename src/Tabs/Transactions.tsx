@@ -40,8 +40,9 @@ function Transactions({setTab}:props) {
         setRemoveActive(!removeActive)
     }
 
-    const removeEntry = (id: number) => {
-        deleteData(getDatabase(), id)
+    const removeEntry = async (id: number) => {
+        await deleteData(getDatabase(), id);
+        renderData();
     }
 
     const renderData = async () => {

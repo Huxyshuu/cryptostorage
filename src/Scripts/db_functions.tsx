@@ -224,14 +224,13 @@ export function queryData(database: any): Promise<object[]> {
 
 export function deleteData(database, id): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        const sql = `SELECT * FROM transactions WHERE id = ${id} `
+        const sql = `DELETE FROM transactions WHERE id = ${id} `
 
         if (database !== null) {
             database.get(sql, [], (err, row) => {
               if (err) {
                 reject(err);
               } else {
-                console.log(row);
                 resolve();
               }
             });
