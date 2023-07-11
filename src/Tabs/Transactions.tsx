@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
-import {getDatabase, insertData, queryData} from '../Scripts/db_functions.tsx';
+import {getDatabase, insertData, queryData, deleteData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
@@ -15,17 +15,6 @@ function Transactions({setTab}:props) {
     const [addingEntry, setAddingEntry] = useState(false);
     const [data, setData] = useState([{}]);
     const [removeActive, setRemoveActive] = useState(false);
-
-    const addToDatabase = () => {
-        setAddingEntry(true);
-    }
-
-    interface TransactionData {
-        taxed: { checked: boolean };
-        date: { value: string };
-        value: { value: string };
-        amount: { value: string };
-      }
 
     const confirmAdd = async (event: React.FormEvent) => {
         try {
@@ -51,8 +40,8 @@ function Transactions({setTab}:props) {
         setRemoveActive(!removeActive)
     }
 
-    const removeEntry = id => {
-        console.log(id);
+    const removeEntry = (id: number) => {
+        deleteData(getDatabase(), id)
     }
 
     const renderData = async () => {
@@ -81,12 +70,19 @@ function Transactions({setTab}:props) {
         renderData();
     }, [])
 
+    interface Transaction {
+        taxed: { checked: boolean };
+        date: { value: string };
+        value: { value: string };
+        amount: { value: string };
+    }
+
     return (
         <div className="content transactions">
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
-                    <button onClick={addToDatabase}>Add</button>
+                    <button onClick={() => setAddingEntry(true)}>Add</button>
                     <button>Edit</button>
                     <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
                 </div>
@@ -138,10 +134,11 @@ function Transactions({setTab}:props) {
                             let amount = 0
                             let total = 0                               
                             let fee = 0
+
                             try {
                                 value = parseFloat(transaction.value);
                                 amount = parseFloat(transaction.amount);
-                                total = transaction.value * transaction.amount
+                                total = value * amount
                                 fee = total * 0.001
                                 id = transaction.id
                             } catch(err) {
@@ -152,7 +149,7 @@ function Transactions({setTab}:props) {
                             return (
                             <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive ? "hoverGray" : ""}`} 
                             key={index+"-transaction"}
-                            onClick={ removeActive ? () => removeEntry(transaction.id) : () => {console.log("Hi")}}>
+                            onClick={ removeActive ? () => removeEntry(transaction.id) : null}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p>{transaction.date}</p>
                                 <p>{value.toFixed(2)} €</p>
@@ -168,7 +165,7 @@ function Transactions({setTab}:props) {
                 </> 
                 : 
                 <>
-                    {databaseExists ? <p id="noData" onClick={addToDatabase}>Add a first entry</p>
+                    {databaseExists ? <p id="noData" onClick={() => setAddingEntry(true)}>Add a first entry</p>
                     : <p id="noData" onClick={goToDatabase}>Add a database</p>}
                 </>
                 }

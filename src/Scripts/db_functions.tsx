@@ -189,7 +189,7 @@ export function insertData(database: any, data: TransactionData): Promise<void> 
         ]
 
         if (database !== null) {
-            database.all(sql, params, (err, rows) => {
+            database.all(sql, params, (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -220,7 +220,26 @@ export function queryData(database: any): Promise<object[]> {
         reject(new Error("No database selected"));
       }
     });
-  }
+}
+
+export function deleteData(database, id): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const sql = `SELECT * FROM transactions WHERE id = ${id} `
+
+        if (database !== null) {
+            database.get(sql, [], (err, row) => {
+              if (err) {
+                reject(err);
+              } else {
+                console.log(row);
+                resolve();
+              }
+            });
+          } else {
+            reject(new Error("No entry found"));
+          }
+    });
+}
 
 
 
