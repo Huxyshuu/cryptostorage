@@ -13,8 +13,17 @@ function Transactions({setTab}:props) {
     const [dataExists, setDataExists] = useState(false);
     const [databaseExists, setDatabaseExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
+    const [editingEntry, setEditingEntry] = useState(false);
     const [data, setData] = useState([{}]);
     const [removeActive, setRemoveActive] = useState(false);
+    const [editingActive, setEditingActive] = useState(false);
+
+    const addEntry = () => {
+        setAddingEntry(!addingEntry);
+        setRemoveActive(false);
+        setEditingActive(false);
+        setEditingEntry(false);
+    }
 
     const confirmAdd = async (event: React.FormEvent) => {
         try {
@@ -28,21 +37,41 @@ function Transactions({setTab}:props) {
 
             setAddingEntry(false);
             setDataExists(true);
-            renderData()
+            renderData();
         } catch (error) {
-            console.error(error)
+            console.error(error);
             setDataExists(false);
             setAddingEntry(false);
         }
     }
 
     const activateRemove = () => {
-        setRemoveActive(!removeActive)
+        setRemoveActive(!removeActive);
+        setEditingActive(false);
+        setAddingEntry(false);
+        setEditingEntry(false);
+    }
+
+    const activateEditing = () => {
+        setEditingActive(!editingActive);
+        setRemoveActive(false);
+        setAddingEntry(false);
+        setEditingEntry(false);
     }
 
     const removeEntry = async (id: number) => {
         await deleteData(getDatabase(), id);
         renderData();
+    }
+
+    const editEntry = () => {
+        setEditingEntry(true);
+    }
+
+    const confirmEdit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        console.log("Editing!");
+        console.log(event);
     }
 
     const renderData = async () => {
@@ -83,8 +112,8 @@ function Transactions({setTab}:props) {
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
-                    <button onClick={() => setAddingEntry(true)}>Add</button>
-                    <button>Edit</button>
+                    <button onClick={addEntry} className={ addingEntry ? "grayed" : ""}>Add</button>
+                    <button onClick={activateEditing} className={ editingActive ? "grayed" : ""}>Edit</button>
                     <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
                 </div>
             </div>
@@ -117,9 +146,9 @@ function Transactions({setTab}:props) {
             <div className="transactionStuff">
                 <div className="titles">
                     <p>Taxed</p>
-                    <p>Date</p>
+                    <p className="date">Date</p>
                     <p>Value</p>
-                    <p>Amount</p>
+                    <p className="amount">Amount</p>
                     <p>Total</p>
                     <p>Fee</p>
                     <p>Return</p>
@@ -148,13 +177,16 @@ function Transactions({setTab}:props) {
                             
 
                             return (
-                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive ? "hoverGray" : ""}`} 
+                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive || editingActive ? "hoverGray" : ""}`} 
                             key={index+"-transaction"}
-                            onClick={ removeActive ? () => removeEntry(transaction.id) : null}>
+                            onClick={ () => {
+                                if (removeActive) removeEntry(transaction.id);
+                                if (editingActive) editEntry(transaction.id)
+                            }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
-                                <p>{transaction.date}</p>
+                                <p className="date">{transaction.date}</p>
                                 <p>{value.toFixed(2)} €</p>
-                                <p>{amount.toFixed(2)}</p>
+                                <p className="amount">{amount.toFixed(2)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{fee.toFixed(2)} €</p>
                                 <p>- €</p>
@@ -166,7 +198,7 @@ function Transactions({setTab}:props) {
                 </> 
                 : 
                 <>
-                    {databaseExists ? <p id="noData" onClick={() => setAddingEntry(true)}>Add a first entry</p>
+                    {databaseExists ? <p id="noData" onClick={addEntry}>Add a first entry</p>
                     : <p id="noData" onClick={goToDatabase}>Add a database</p>}
                 </>
                 }
@@ -203,6 +235,44 @@ function Transactions({setTab}:props) {
                     <div className="addButton">
                         <input type="submit" form="addForm" value="Add"/>
                         <button onClick={() => setAddingEntry(false)}>Cancel</button>
+                    </div>
+                </div>
+                :
+                <>
+                </>}
+
+                {editingEntry ? 
+                <div id="addingEntry">
+                    <div className="entryHeader">
+                        <h4>Edit an entry</h4>
+                        <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
+                    </div>
+                    <div className="titles">
+                        <p>Taxed</p>
+                        <p>Date</p>
+                        <p>Value</p>
+                        <p>Amount</p>
+                        <p>Total</p>
+                        <p>Fee</p>
+                        <p>Return</p>
+                        <p>Profit %</p>
+                    </div>
+                    <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmEdit(e)}} className="info"> 
+                        <div className="squaredTwo">
+                            <input type="checkbox" value="None" id="squaredTwo" name="check" />
+                            <label htmlFor="squaredTwo"></label>
+                        </div>
+                        <input type="text" id="date"/>
+                        <input type="text" id="value"/>
+                        <input type="text" id="amount"/>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </form>
+                    <div className="addButton">
+                        <input type="submit" form="addForm" value="Edit"/>
+                        <button onClick={() => setEditingEntry(false)}>Cancel</button>
                     </div>
                 </div>
                 :

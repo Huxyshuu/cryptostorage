@@ -129,6 +129,7 @@
     height: 75%;
     width: 101%;
     overflow-y: auto;
+    overflow-x: hidden;
     border-radius: 0.5rem;
 
     &::-webkit-scrollbar {
@@ -171,6 +172,14 @@
                 border: none;
             }
         }
+
+        .date {
+            width: 110%;
+        }
+
+        .amount {
+            width: 80%;
+        }
     }
 
     .info {
@@ -190,6 +199,14 @@
                 font-size: 2rem;
             }
         }  
+
+        .date {
+            width: 110%;
+        }
+
+        .amount {
+            width: 80%;
+        }
     }
 
     .hoverGray {
