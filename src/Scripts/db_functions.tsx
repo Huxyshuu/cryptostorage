@@ -47,7 +47,7 @@ export function changeDatabase(event: React.ChangeEvent): void {
     
     if (event.target !== null || event.target !== undefined) {
         const ev = (event.target as HTMLInputElement).files;
-        if (ev !== null || ev !== undefined) {
+        if (ev !== null) {
             const file = ev[0];
 
             if (file.path.includes(".db")) {

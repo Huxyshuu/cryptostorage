@@ -14,6 +14,7 @@ function Transactions({setTab}:props) {
     const [databaseExists, setDatabaseExists] = useState(false);
     const [addingEntry, setAddingEntry] = useState(false);
     const [data, setData] = useState([{}]);
+    const [removeActive, setRemoveActive] = useState(false);
 
     const addToDatabase = () => {
         setAddingEntry(true);
@@ -44,6 +45,14 @@ function Transactions({setTab}:props) {
             setDataExists(false);
             setAddingEntry(false);
         }
+    }
+
+    const activateRemove = () => {
+        setRemoveActive(!removeActive)
+    }
+
+    const removeEntry = id => {
+        console.log(id);
     }
 
     const renderData = async () => {
@@ -79,7 +88,7 @@ function Transactions({setTab}:props) {
                 <div>
                     <button onClick={addToDatabase}>Add</button>
                     <button>Edit</button>
-                    <button>Remove</button>
+                    <button onClick={activateRemove}>Remove</button>
                 </div>
             </div>
             
@@ -124,6 +133,7 @@ function Transactions({setTab}:props) {
                 <>
                     {
                         data.map((transaction, index) => {
+                            let id = 0
                             let value = 0
                             let amount = 0
                             let total = 0                               
@@ -133,13 +143,16 @@ function Transactions({setTab}:props) {
                                 amount = parseFloat(transaction.amount);
                                 total = transaction.value * transaction.amount
                                 fee = total * 0.001
+                                id = transaction.id
                             } catch(err) {
                                 console.log(err);
                             }
                             
 
                             return (
-                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""}`} key={index+"-transaction"}>
+                            <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""}`} 
+                            key={index+"-transaction"}
+                            onClick={ removeActive ? () => removeEntry(transaction.id) : () => {console.log("Hi")}}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p>{transaction.date}</p>
                                 <p>{value.toFixed(2)} €</p>
