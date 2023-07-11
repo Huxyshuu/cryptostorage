@@ -18,6 +18,13 @@ function Transactions({setTab}:props) {
     const [removeActive, setRemoveActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
 
+    const [editInfo, setEditInfo] = useState({
+        taxed: false,
+        date: "",
+        value: 0.0,
+        amount: 0.0
+    });
+
     const addEntry = () => {
         setAddingEntry(!addingEntry);
         setRemoveActive(false);
@@ -64,8 +71,18 @@ function Transactions({setTab}:props) {
         renderData();
     }
 
-    const editEntry = () => {
+    const editEntry = (entry: React.BaseSyntheticEvent) => {
+        
+        let taxed = false;
+        {entry.children[0].innerHTML == "X" ? taxed = true : taxed = false}
+        const date = entry.children[1].innerHTML;
+        const value = parseFloat(entry.children[2].innerHTML);
+        const amount = parseFloat(entry.children[3].innerHTML);
+
+        setEditInfo({taxed: taxed, date: date, value: value, amount: amount})
+
         setEditingEntry(true);
+        
     }
 
     const confirmEdit = async (event: React.FormEvent) => {
@@ -179,9 +196,9 @@ function Transactions({setTab}:props) {
                             return (
                             <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive || editingActive ? "hoverGray" : ""}`} 
                             key={index+"-transaction"}
-                            onClick={ () => {
+                            onClick={ (event: React.FormEvent) => {
                                 if (removeActive) removeEntry(transaction.id);
-                                if (editingActive) editEntry(transaction.id)
+                                if (editingActive) editEntry(event.target.parentElement);
                             }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p className="date">{transaction.date}</p>
@@ -221,7 +238,7 @@ function Transactions({setTab}:props) {
                     </div>
                     <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmAdd(e)}} className="info"> 
                         <div className="squaredTwo">
-                            <input type="checkbox" value="None" id="squaredTwo" name="check" />
+                            <input type="checkbox" id="squaredTwo" name="check" />
                             <label htmlFor="squaredTwo"></label>
                         </div>
                         <input type="text" id="date"/>
@@ -241,6 +258,7 @@ function Transactions({setTab}:props) {
                 <>
                 </>}
 
+                { /* USES THE SAME STYLING AS ADDING ENTRY BUT IS USED FOR EDITING ENTRY*/ }
                 {editingEntry ? 
                 <div id="addingEntry">
                     <div className="entryHeader">
@@ -259,12 +277,12 @@ function Transactions({setTab}:props) {
                     </div>
                     <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmEdit(e)}} className="info"> 
                         <div className="squaredTwo">
-                            <input type="checkbox" value="None" id="squaredTwo" name="check" />
+                            <input type="checkbox" defaultChecked={editInfo.taxed} id="squaredTwo" name="check" />
                             <label htmlFor="squaredTwo"></label>
                         </div>
-                        <input type="text" id="date"/>
-                        <input type="text" id="value"/>
-                        <input type="text" id="amount"/>
+                        <input type="text" id="date-edit" defaultValue={editInfo.date}/>
+                        <input type="text" id="value-edit" defaultValue={editInfo.value}/>
+                        <input type="text" id="amount-edit" defaultValue={editInfo.amount}/>
                         <p></p>
                         <p></p>
                         <p></p>
@@ -278,9 +296,6 @@ function Transactions({setTab}:props) {
                 :
                 <>
                 </>}
-
-                
-
                 
             </div>
         </div>
