@@ -12,24 +12,29 @@ function Transactions({setTab}:props) {
 
     const [dataExists, setDataExists] = useState(false);
     const [databaseExists, setDatabaseExists] = useState(false);
-    const [addingEntry, setAddingEntry] = useState(false);
-    const [editingEntry, setEditingEntry] = useState(false);
-    const [data, setData] = useState([{}]);
+
+    const [addingLayout, setAddingLayout] = useState(false);
+    const [editingLayout, setEditingLayout] = useState(false);
+    const [removingLayout, setRemovingLayout] = useState(false);
+    
     const [removeActive, setRemoveActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
 
+    const [data, setData] = useState([{}]);
     const [editInfo, setEditInfo] = useState({
         taxed: false,
         date: "",
         value: 0.0,
         amount: 0.0
     });
+    const [removeId, setRemoveId] = useState(0);
 
     const addEntry = () => {
-        setAddingEntry(!addingEntry);
+        setAddingLayout(!addingLayout);
         setRemoveActive(false);
         setEditingActive(false);
-        setEditingEntry(false);
+        setEditingLayout(false);
+        setRemovingLayout(false);
     }
 
     const confirmAdd = async (event: React.FormEvent) => {
@@ -42,39 +47,51 @@ function Transactions({setTab}:props) {
                 amount: (event.target as HTMLFormElement)[3],
             });
 
-            setAddingEntry(false);
+            setAddingLayout(false);
             setDataExists(true);
             renderData();
         } catch (error) {
             console.error(error);
             setDataExists(false);
-            setAddingEntry(false);
+            setAddingLayout(false);
         }
     }
 
     const activateRemove = () => {
         setRemoveActive(!removeActive);
         setEditingActive(false);
-        setAddingEntry(false);
-        setEditingEntry(false);
+        setAddingLayout(false);
+        setEditingLayout(false);
+        setRemovingLayout(false);
     }
 
     const activateEditing = () => {
         setEditingActive(!editingActive);
         setRemoveActive(false);
-        setAddingEntry(false);
-        setEditingEntry(false);
+        setAddingLayout(false);
+        setEditingLayout(false);
+        setRemovingLayout(false);
     }
 
     const removeEntry = async (id: number) => {
-        await deleteData(getDatabase(), id);
+        setRemovingLayout(true);
+        setRemoveId(id);
+    }
+
+    const confirmRemove = async () => 
+    {
+        console.log(removeId);
+        {/*
+        await deleteData(getDatabase(), removeId);
         renderData();
+        */}
+        setRemovingLayout(false);
     }
 
     const editEntry = async (entry: React.BaseSyntheticEvent) => {
 
         await setEditingActive(false);
-        await setEditingEntry(false);
+        await setEditingLayout(false);
         
         let taxed = false;
         {entry.children[0].innerHTML == "X" ? taxed = true : taxed = false}
@@ -84,7 +101,7 @@ function Transactions({setTab}:props) {
 
         setEditInfo({taxed: taxed, date: date, value: value, amount: amount})
 
-        setEditingEntry(true);
+        setEditingLayout(true);
         setEditingActive(true);
         
     }
@@ -133,7 +150,7 @@ function Transactions({setTab}:props) {
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
-                    <button onClick={addEntry} className={ addingEntry ? "grayed" : ""}>Add</button>
+                    <button onClick={addEntry} className={ addingLayout ? "grayed" : ""}>Add</button>
                     <button onClick={activateEditing} className={ editingActive ? "grayed" : ""}>Edit</button>
                     <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
                 </div>
@@ -224,8 +241,8 @@ function Transactions({setTab}:props) {
                 </>
                 }
 
-                {addingEntry ? 
-                <div id="addingEntry">
+                {addingLayout ? 
+                <div id="addingLayout">
                     <div className="entryHeader">
                         <h4>Adding a new entry</h4>
                         <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
@@ -255,7 +272,7 @@ function Transactions({setTab}:props) {
                     </form>
                     <div className="addButton">
                         <input type="submit" form="addForm" value="Add"/>
-                        <button onClick={() => setAddingEntry(false)}>Cancel</button>
+                        <button onClick={() => setAddingLayout(false)}>Cancel</button>
                     </div>
                 </div>
                 :
@@ -263,8 +280,8 @@ function Transactions({setTab}:props) {
                 </>}
 
                 { /* USES THE SAME STYLING AS ADDING ENTRY BUT IS USED FOR EDITING ENTRY*/ }
-                {editingEntry ? 
-                <div id="addingEntry" className="editingEntry">
+                {editingLayout ? 
+                <div id="addingLayout">
                     <div className="entryHeader">
                         <h4>Edit an entry</h4>
                         <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
@@ -294,7 +311,33 @@ function Transactions({setTab}:props) {
                     </form>
                     <div className="addButton">
                         <input type="submit" form="addForm" value="Edit"/>
-                        <button onClick={() => setEditingEntry(false)}>Cancel</button>
+                        <button onClick={() => setEditingLayout(false)}>Cancel</button>
+                    </div>
+                </div>
+                :
+                <>
+                </>}
+
+                { /* USES THE SAME STYLING AS ADDING ENTRY BUT IS USED FOR REMOVING ENTRY*/ }
+                {removingLayout ? 
+                <div id="addingLayout">
+                    <div className="entryHeader">
+                        <h4 id="removingHeader">Remove an entry</h4>
+                    </div>
+                    
+                    <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmRemove(e)}} className="info"> 
+                        <div className="squaredTwo">
+                            <input type="checkbox" defaultChecked={editInfo.taxed} id="squaredTwo" name="check" />
+                            <label htmlFor="squaredTwo"></label>
+                        </div>
+                        <input type="text" id="date-edit" defaultValue={editInfo.date}/>
+                        <input type="text" id="value-edit" defaultValue={editInfo.value}/>
+                        <input type="text" id="amount-edit" defaultValue={editInfo.amount}/>
+
+                    </form>
+                    <div className="addButton">
+                        <input type="submit" form="addForm" value="Remove"/>
+                        <button onClick={() => setRemovingLayout(false)}>Cancel</button>
                     </div>
                 </div>
                 :

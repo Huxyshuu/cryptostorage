@@ -259,26 +259,32 @@
         }
     }
 
-    #addingEntry {
+    #addingLayout {
         position: absolute;
         top: 65vh;
-        background-color: $sec-light;
+        background-color: fade-out($sec-light, 0.1);
         border-radius: 0.5rem;
         border: 0.2rem solid $main-dark;
         height: 11rem;
         margin-block: auto;
-        width: 78vw;
+        width: 80%;
 
         .entryHeader {
             display: flex;
             justify-content: space-between;
-            min-width: 70vw;
             margin-inline: 1rem;
 
             h4 {
                 margin-block: 0.5rem;
                 color: $white;
                 font-weight: 300;
+            }
+
+            #removingHeader {
+                margin-inline: auto;
+                font-size: 1.5rem;
+                font-weight: 500;
+
             }
 
             .sellRed {
@@ -400,6 +406,4 @@
             }
         }
     }
-
-    
 }
