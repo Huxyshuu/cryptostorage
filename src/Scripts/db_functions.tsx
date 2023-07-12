@@ -34,7 +34,7 @@ export function addDatabase(event: React.ChangeEvent): void {
                         
                         setTime(file.path);
                         setSize(file.path);
-                        setEdited(file.path);
+                        setModified(file.path);
                         saveData();
                     }
                 });
@@ -117,7 +117,7 @@ export function loadData() {
         }
         
         setTime(currentDatabase);
-        setEdited(currentDatabase);
+        setModified(currentDatabase);
         setSize(currentDatabase);
     }
 }
@@ -136,26 +136,6 @@ export function openDatabase(path: string) {
 
     return db
 }
-
-/*
-export function openDatabase(name: string) {
-    const databaseName = name.replace(" ", "_").trim();
-    let path = "";
-    if (databaseName.includes(".db")) {
-        path = `./src/Database/${databaseName}`;
-    } else {
-        path = `./src/Database/${databaseName}.db`;
-    }
-    
-    db = new sqlite3.Database(path,
-        (err) => {
-            if (err) return console.error(err.message);
-        });
-
-    currentDatabase = path;
-    saveData();
-}
-*/
 
 export function getDatabase() {
     if (currentDatabase === undefined || currentDatabase === "None") {
@@ -176,7 +156,7 @@ interface TransactionData {
     date: { value: string };
     value: { value: string };
     amount: { value: string };
-  }
+}
 
 export function insertData(database: any, data: TransactionData): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -222,6 +202,34 @@ export function queryData(database: any): Promise<object[]> {
     });
 }
 
+interface EntryInfo {
+    id: number,
+    taxed: boolean;
+    date: string;
+    value: number;
+    amount: number;
+}
+
+export function editData(database, data: EntryInfo): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const sql = `UPDATE transactions
+                     SET coin = "ETH", taxed = ${data.taxed}, date = ${data.date}, value = ${data.value}, amount = ${data.amount}
+                     WHERE id = ${data.id}`
+
+        if (database !== null) {
+        database.run(sql, [], (err, row) => {
+            if (err) {
+            reject(err);
+            } else {
+            resolve(row);
+            }
+        });
+        } else {
+        reject(new Error("Updating entry failed"));
+        }
+    })
+}
+
 export function deleteData(database, id): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const sql = `DELETE FROM transactions WHERE id = ${id} `
@@ -263,7 +271,7 @@ function setTime(file: string): void {
     }
 }
 
-function setEdited(file: string): void {
+function setModified(file: string): void {
     let dateCreated = ""
     try {
         dateCreated = fs.statSync(file).mtime.toLocaleDateString("fi-FI");

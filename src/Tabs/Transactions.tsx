@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
-import {getDatabase, insertData, queryData, deleteData} from '../Scripts/db_functions.tsx';
+import {getDatabase, insertData, queryData, editData, deleteData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
@@ -22,6 +22,7 @@ function Transactions({setTab}:props) {
 
     const [data, setData] = useState([{}]);
     const [entryInfo, setEntryInfo] = useState({
+        id: 0,
         taxed: false,
         date: "",
         value: 0.0,
@@ -73,7 +74,7 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const editEntry = async (entry: React.BaseSyntheticEvent) => {
+    const editEntry = async (entry: React.BaseSyntheticEvent, entryId: number) => {
 
         /*
             Surprisingly the "await" does have an effect on the setStates
@@ -84,13 +85,14 @@ function Transactions({setTab}:props) {
         await setEditingActive(false);
         await setEditingLayout(false);
         
+        const id = entryId;
         let taxed = false;
         {entry.children[0].innerHTML == "X" ? taxed = true : taxed = false}
         const date = entry.children[1].innerHTML;
         const value = parseFloat(entry.children[2].innerHTML);
         const amount = parseFloat(entry.children[3].innerHTML);
 
-        setEntryInfo({taxed: taxed, date: date, value: value, amount: amount})
+        setEntryInfo({id: id, taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingLayout(true);
         setEditingActive(true);
@@ -99,8 +101,11 @@ function Transactions({setTab}:props) {
 
     const confirmEdit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log("Editing!");
-        console.log(event);
+        console.log(entryInfo);
+        // await editData(getDatabase(), entryInfo)
+
+        renderData();
+        setEditingLayout(false);
     }
 
     const removeEntry = async (entry: React.BaseSyntheticEvent, id: number) => {
@@ -125,11 +130,10 @@ function Transactions({setTab}:props) {
     const confirmRemove = async (event: React.FormEvent) => 
     {
         event.preventDefault();
-        console.log(removeId);
-        {/*
+        
         await deleteData(getDatabase(), removeId);
+
         renderData();
-        */}
         setRemovingLayout(false);
     }
 
@@ -240,7 +244,7 @@ function Transactions({setTab}:props) {
                             key={index+"-transaction"}
                             onClick={ (event: React.FormEvent) => {
                                 if (removeActive) removeEntry(event.target.parentElement, transaction.id);
-                                if (editingActive) editEntry(event.target.parentElement);
+                                if (editingActive) editEntry(event.target.parentElement, transaction.id);
                             }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p className="date">{transaction.date}</p>
