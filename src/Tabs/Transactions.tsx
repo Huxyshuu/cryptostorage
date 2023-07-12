@@ -21,7 +21,7 @@ function Transactions({setTab}:props) {
     const [editingActive, setEditingActive] = useState(false);
 
     const [data, setData] = useState([{}]);
-    const [editInfo, setEditInfo] = useState({
+    const [entryInfo, setEntryInfo] = useState({
         taxed: false,
         date: "",
         value: 0.0,
@@ -73,23 +73,14 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const removeEntry = async (id: number) => {
-        setRemovingLayout(true);
-        setRemoveId(id);
-    }
-
-    const confirmRemove = async () => 
-    {
-        console.log(removeId);
-        {/*
-        await deleteData(getDatabase(), removeId);
-        renderData();
-        */}
-        setRemovingLayout(false);
-    }
-
     const editEntry = async (entry: React.BaseSyntheticEvent) => {
 
+        /*
+            Surprisingly the "await" does have an effect on the setStates
+            as it ensures enough time for things to update before rendering.
+
+            Same applies for the removeEntry function.
+        */ 
         await setEditingActive(false);
         await setEditingLayout(false);
         
@@ -99,7 +90,7 @@ function Transactions({setTab}:props) {
         const value = parseFloat(entry.children[2].innerHTML);
         const amount = parseFloat(entry.children[3].innerHTML);
 
-        setEditInfo({taxed: taxed, date: date, value: value, amount: amount})
+        setEntryInfo({taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingLayout(true);
         setEditingActive(true);
@@ -110,6 +101,36 @@ function Transactions({setTab}:props) {
         event.preventDefault();
         console.log("Editing!");
         console.log(event);
+    }
+
+    const removeEntry = async (entry: React.BaseSyntheticEvent, id: number) => {
+        
+
+        await setRemovingLayout(false);
+        await setRemoveActive(false);
+        
+        let taxed = false;
+        {entry.children[0].innerHTML == "X" ? taxed = true : taxed = false}
+        const date = entry.children[1].innerHTML;
+        const value = parseFloat(entry.children[2].innerHTML);
+        const amount = parseFloat(entry.children[3].innerHTML);
+
+        setEntryInfo({taxed: taxed, date: date, value: value, amount: amount})
+
+        setRemovingLayout(true);
+        setRemoveActive(true);
+        setRemoveId(id);
+    }
+
+    const confirmRemove = async (event: React.FormEvent) => 
+    {
+        event.preventDefault();
+        console.log(removeId);
+        {/*
+        await deleteData(getDatabase(), removeId);
+        renderData();
+        */}
+        setRemovingLayout(false);
     }
 
     const renderData = async () => {
@@ -218,7 +239,7 @@ function Transactions({setTab}:props) {
                             <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive || editingActive ? "hoverGray" : ""}`} 
                             key={index+"-transaction"}
                             onClick={ (event: React.FormEvent) => {
-                                if (removeActive) removeEntry(transaction.id);
+                                if (removeActive) removeEntry(event.target.parentElement, transaction.id);
                                 if (editingActive) editEntry(event.target.parentElement);
                             }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
@@ -298,12 +319,12 @@ function Transactions({setTab}:props) {
                     </div>
                     <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmEdit(e)}} className="info"> 
                         <div className="squaredTwo">
-                            <input type="checkbox" defaultChecked={editInfo.taxed} id="squaredTwo" name="check" />
+                            <input type="checkbox" defaultChecked={entryInfo.taxed} id="squaredTwo" name="check" />
                             <label htmlFor="squaredTwo"></label>
                         </div>
-                        <input type="text" id="date-edit" defaultValue={editInfo.date}/>
-                        <input type="text" id="value-edit" defaultValue={editInfo.value}/>
-                        <input type="text" id="amount-edit" defaultValue={editInfo.amount}/>
+                        <input type="text" defaultValue={entryInfo.date}/>
+                        <input type="text" defaultValue={entryInfo.value}/>
+                        <input type="text" defaultValue={entryInfo.amount}/>
                         <p></p>
                         <p></p>
                         <p></p>
@@ -327,13 +348,12 @@ function Transactions({setTab}:props) {
                     
                     <form id="addForm" onSubmit={(e: React.FormEvent): void => {confirmRemove(e)}} className="info"> 
                         <div className="squaredTwo">
-                            <input type="checkbox" defaultChecked={editInfo.taxed} id="squaredTwo" name="check" />
+                            <input type="checkbox" defaultChecked={entryInfo.taxed} id="squaredTwo" name="check" />
                             <label htmlFor="squaredTwo"></label>
                         </div>
-                        <input type="text" id="date-edit" defaultValue={editInfo.date}/>
-                        <input type="text" id="value-edit" defaultValue={editInfo.value}/>
-                        <input type="text" id="amount-edit" defaultValue={editInfo.amount}/>
-
+                        <input type="text" defaultValue={entryInfo.date}/>
+                        <input type="text" defaultValue={entryInfo.value}/>
+                        <input type="text" defaultValue={entryInfo.amount}/>
                     </form>
                     <div className="addButton">
                         <input type="submit" form="addForm" value="Remove"/>
