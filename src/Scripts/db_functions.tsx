@@ -213,11 +213,18 @@ interface EntryInfo {
 export function editData(database, data: EntryInfo): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const sql = `UPDATE transactions
-                     SET coin = "ETH", taxed = ${data.taxed}, date = ${data.date}, value = ${data.value}, amount = ${data.amount}
-                     WHERE id = ${data.id}`
+                     SET coin = "ETH", taxed = ?, date = ?, value = ?, amount = ?
+                     WHERE id = ?`
+                     const params = [
+                        data.taxed, 
+                        data.date, 
+                        data.value, 
+                        data.amount,
+                        data.id
+                    ]
 
         if (database !== null) {
-        database.run(sql, [], (err, row) => {
+        database.run(sql, params, (err, row) => {
             if (err) {
             reject(err);
             } else {

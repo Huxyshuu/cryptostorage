@@ -101,8 +101,13 @@ function Transactions({setTab}:props) {
 
     const confirmEdit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(entryInfo);
-        // await editData(getDatabase(), entryInfo)
+        const editedInfo = {id: entryInfo.id ,taxed: event.target[0].checked, date: event.target[1].value, value: parseFloat(event.target[2].value), amount: parseFloat(event.target[3].value)}
+        if (JSON.stringify(editedInfo) === JSON.stringify(entryInfo)) {
+            setEditingLayout(false);
+            return
+        }
+        setEntryInfo(editedInfo)
+        await editData(getDatabase(), editedInfo)
 
         renderData();
         setEditingLayout(false);
