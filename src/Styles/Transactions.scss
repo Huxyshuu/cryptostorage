@@ -1,6 +1,5 @@
 @import '../Utilities/variables.scss';
 
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -223,6 +222,7 @@
     
     .roundedCorners {
         p {
+
             &:first-of-type {
                 border-bottom-left-radius: 0.5rem; 
             }
@@ -400,4 +400,6 @@
             }
         }
     }
+
+    
 }

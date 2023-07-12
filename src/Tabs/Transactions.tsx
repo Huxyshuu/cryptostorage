@@ -71,7 +71,10 @@ function Transactions({setTab}:props) {
         renderData();
     }
 
-    const editEntry = (entry: React.BaseSyntheticEvent) => {
+    const editEntry = async (entry: React.BaseSyntheticEvent) => {
+
+        await setEditingActive(false);
+        await setEditingEntry(false);
         
         let taxed = false;
         {entry.children[0].innerHTML == "X" ? taxed = true : taxed = false}
@@ -82,6 +85,7 @@ function Transactions({setTab}:props) {
         setEditInfo({taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingEntry(true);
+        setEditingActive(true);
         
     }
 
@@ -260,7 +264,7 @@ function Transactions({setTab}:props) {
 
                 { /* USES THE SAME STYLING AS ADDING ENTRY BUT IS USED FOR EDITING ENTRY*/ }
                 {editingEntry ? 
-                <div id="addingEntry">
+                <div id="addingEntry" className="editingEntry">
                     <div className="entryHeader">
                         <h4>Edit an entry</h4>
                         <h4>To <span className="sellRed">SELL</span>, use a negative value for AMOUNT!</h4>
