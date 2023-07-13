@@ -29,6 +29,12 @@ function Transactions({setTab}:props) {
         amount: 0.0
     });
     const [removeId, setRemoveId] = useState(0);
+    const [coinInfo, setCoinInfo] = useState({
+        curAmount: 0.0,
+        totalSum: 0.0,
+        curLimit: 0.0,
+        profitSum: 0.0
+    })
 
     const addEntry = () => {
         setAddingLayout(!addingLayout);
@@ -142,6 +148,25 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
+    const calculateCoin = async (query: object[]) => {
+        const data = await query;
+
+        let curAmount = 0;
+        let totalSum = 0;
+        let curLimit = 0;
+        let profitSum = 0;
+
+        data.forEach((entry) => {
+            curAmount += entry.amount
+
+            const total = entry.amount * entry.value 
+            totalSum += total
+        })
+        curLimit = (totalSum / curAmount);
+
+        setCoinInfo({curAmount, totalSum, curLimit, profitSum});
+    }
+
     const renderData = async () => {
         try {
           const query = await queryData(getDatabase());
@@ -150,6 +175,8 @@ function Transactions({setTab}:props) {
             setData(query);
             setDataExists(true);
             setDatabaseExists(true)
+
+            calculateCoin(query);
           } else {
             setDataExists(false);
             setDatabaseExists(true)
@@ -204,10 +231,10 @@ function Transactions({setTab}:props) {
                         </div>
                         
                     </div>
-                    <p>2000</p>
-                    <p>2000 €</p>
-                    <p>2000 €</p>
-                    <p>2000 €</p>
+                    <p>{(coinInfo.curAmount).toFixed(5)}</p>
+                    <p>{(coinInfo.totalSum).toFixed(2)} €</p>
+                    <p>{(coinInfo.curLimit).toFixed(2)} €</p>
+                    <p>{(coinInfo.profitSum).toFixed(2)} €</p>
                 </div>
             </div>
 
@@ -254,7 +281,7 @@ function Transactions({setTab}:props) {
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p className="date">{transaction.date}</p>
                                 <p>{value.toFixed(2)} €</p>
-                                <p className="amount">{amount.toFixed(2)}</p>
+                                <p className="amount">{amount.toFixed(5)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{fee.toFixed(2)} €</p>
                                 <p>- €</p>
