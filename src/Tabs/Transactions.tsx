@@ -169,17 +169,24 @@ function Transactions({setTab}:props) {
 
     const checkProfit = (query: Array<object>) => {
         const data = query.toReversed();
+
+        const profitList: Array<object> = [];
+
         let sum = 0;
         let profit = 0;
         for (const entry in data) {
             const total = data[entry].value * data[entry].amount;
             if (total <= 0 ) {
                 profit = -(total) - sum 
-                break
+                profitList.unshift({id: data[entry].id, profit: profit})
+                // Reset 
+                sum = 0;
+                profit = 0;
+                continue
             }
             sum += total;
         }
-        console.log(profit);
+        return profitList;
     }
 
     const renderData = async () => {
