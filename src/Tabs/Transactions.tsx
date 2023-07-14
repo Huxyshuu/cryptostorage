@@ -148,8 +148,8 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const calculateCoin = async (query: object[]) => {
-        const data = await query;
+    const calculateCoin = (query: Array<object>) => {
+        const data = query;
 
         let curAmount = 0;
         let totalSum = 0;
@@ -167,6 +167,21 @@ function Transactions({setTab}:props) {
         setCoinInfo({curAmount, totalSum, curLimit, profitSum});
     }
 
+    const checkProfit = (query: Array<object>) => {
+        const data = query.toReversed();
+        let sum = 0;
+        let profit = 0;
+        for (const entry in data) {
+            const total = data[entry].value * data[entry].amount;
+            if (total <= 0 ) {
+                profit = -(total) - sum 
+                break
+            }
+            sum += total;
+        }
+        console.log(profit);
+    }
+
     const renderData = async () => {
         try {
           const query = await queryData(getDatabase());
@@ -177,6 +192,7 @@ function Transactions({setTab}:props) {
             setDatabaseExists(true)
 
             calculateCoin(query);
+            checkProfit(query);
           } else {
             setDataExists(false);
             setDatabaseExists(true)
@@ -283,7 +299,7 @@ function Transactions({setTab}:props) {
                                 <p>{value.toFixed(2)} €</p>
                                 <p className="amount">{amount.toFixed(5)}</p>
                                 <p>{total.toFixed(2)} €</p>
-                                <p>{fee.toFixed(2)} €</p>
+                                <p>{Math.abs(fee.toFixed(2))} €</p>
                                 <p>- €</p>
                                 <p>- %</p>
                             </div>
