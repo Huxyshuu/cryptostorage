@@ -35,6 +35,7 @@ function Transactions({setTab}:props) {
         curLimit: 0.0,
         profitSum: 0.0
     })
+    const [profit, setProfit] = useState([{}])
 
     const addEntry = () => {
         setAddingLayout(!addingLayout);
@@ -174,11 +175,13 @@ function Transactions({setTab}:props) {
 
         let sum = 0;
         let profit = 0;
+        let percent = 0;
         for (const entry in data) {
             const total = data[entry].value * data[entry].amount;
             if (total <= 0 ) {
                 profit = -(total) - sum 
-                profitList.unshift({id: data[entry].id, profit: profit})
+                percent = ((sum + profit) / sum - 1) * 100; // fancy pantsy maht ;D
+                profitList.unshift({id: data[entry].id, profit: profit, percent: percent})
                 // Reset 
                 sum = 0;
                 profit = 0;
@@ -199,7 +202,7 @@ function Transactions({setTab}:props) {
             setDatabaseExists(true)
 
             calculateCoin(query);
-            checkProfit(query);
+            setProfit(checkProfit(query));
           } else {
             setDataExists(false);
             setDatabaseExists(true)
@@ -293,6 +296,7 @@ function Transactions({setTab}:props) {
                                 console.log(err);
                             }
                             
+                            const profitData = profit.find(entry => entry.id === id);
 
                             return (
                             <div className={`info ${ index == data.length - 1 ? "roundedCorners" : ""} ${amount < 0 ? "sold" : ""} ${ removeActive || editingActive ? "hoverGray" : ""}`} 
@@ -307,8 +311,8 @@ function Transactions({setTab}:props) {
                                 <p className="amount">{amount.toFixed(5)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{Math.abs(fee.toFixed(2))} €</p>
-                                <p>- €</p>
-                                <p>- %</p>
+                                <p>{profitData ? `${profitData.profit.toFixed(2)} €` : ""}</p>
+                                <p>{profitData ? `${profitData.percent.toFixed(2)} %` : ""}</p>
                             </div>
                             )
                         })
