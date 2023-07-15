@@ -157,14 +157,13 @@ function Transactions({setTab}:props) {
         let profitSum = 0;
 
         query.forEach((entry) => {
-            curAmount += entry.amount
+            curAmount += entry.amount - (entry.amount * 0.005) // amount - fee
 
             const total = entry.amount * entry.value 
             totalSum += total
         })
 
         profit.forEach((entry) => {
-            console.log(entry);
             profitSum += entry.profit;
         })
 
@@ -175,9 +174,6 @@ function Transactions({setTab}:props) {
         if (totalSum > 1) {
             setCoinInfo({curAmount, totalSum, curLimit, profitSum});
         } else {
-            curAmount = 0.0;
-            totalSum = 0.0;
-            curLimit = 0.0;
             setCoinInfo({curAmount, totalSum, curLimit, profitSum});
         }
 
