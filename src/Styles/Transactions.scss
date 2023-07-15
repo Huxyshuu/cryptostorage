@@ -197,6 +197,8 @@
                 color: $soft-red;
                 font-size: 2rem;
             }
+
+            
         }  
 
         .date {
@@ -217,8 +219,6 @@
         }
         
     }
-
-    
     
     .roundedCorners {
         p {
@@ -237,6 +237,30 @@
         p {
             color: $soft-red;
             background-color: $light-red;
+        }
+
+        .profitValuePos {
+            font-weight: 300;
+            color: $white;
+            background-color: $profitValuePos;
+        }
+
+        .profitValueNeg {
+            font-weight: 300;
+            color: $white;
+            background-color: $profitValueNeg;
+        }
+
+        .profitPercentPos {
+            font-weight: 300;
+            color: $white;
+            background-color: $profitPercentPos;
+        }
+
+        .profitPercentNeg {
+            font-weight: 300;
+            color: $white;
+            background-color: $profitPercentNeg;
         }
     }
 

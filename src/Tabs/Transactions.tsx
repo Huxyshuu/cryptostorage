@@ -311,8 +311,18 @@ function Transactions({setTab}:props) {
                                 <p className="amount">{amount.toFixed(5)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{Math.abs(fee.toFixed(2))} €</p>
-                                <p>{profitData ? `${profitData.profit.toFixed(2)} €` : ""}</p>
-                                <p>{profitData ? `${profitData.percent.toFixed(2)} %` : ""}</p>
+                                {profitData ? 
+                                <>
+                                    <p className={profitData.profit >= 0? "profitValuePos" : "profitValueNeg"}>{profitData ? `${profitData.profit.toFixed(2)} €` : ""}</p>
+                                    <p className={profitData.percent >= 0? "profitPercentPos" : "profitPercentNeg"}>{profitData ? `${profitData.percent.toFixed(2)} %` : ""}</p>
+                                </>
+                                :
+                                <>
+                                    <p>{profitData ? `${profitData.profit.toFixed(2)} €` : ""}</p>
+                                    <p>{profitData ? `${profitData.percent.toFixed(2)} %` : ""}</p>
+                                </>
+                                }
+                                
                             </div>
                             )
                         })

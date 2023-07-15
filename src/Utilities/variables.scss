@@ -17,8 +17,10 @@ $grey: #9d9d9d;
 $soft-red: #FF5959;
 $light-red: #F9CDCD;
 
-$profitValue: #41AA6D;
-$profitPercent: #7FBB36;
+$profitValuePos: #41AA6D;
+$profitPercentPos: #7FBB36;
+$profitValueNeg: #D33333;
+$profitPercentNeg: #f15757;
 
 @mixin buttonStyling {
     text-align: center;
