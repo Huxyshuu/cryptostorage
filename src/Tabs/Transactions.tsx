@@ -149,20 +149,27 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const calculateCoin = (query: Array<object>) => {
-        const data = query;
+    const calculateCoin = (query: Array<object>, profit: Array<object>) => {
 
         let curAmount = 0;
         let totalSum = 0;
         let curLimit = 0;
         let profitSum = 0;
 
-        data.forEach((entry) => {
+        query.forEach((entry) => {
             curAmount += entry.amount
 
             const total = entry.amount * entry.value 
             totalSum += total
         })
+
+        profit.forEach((entry) => {
+            console.log(entry);
+            profitSum += entry.profit;
+        })
+
+        totalSum += profitSum;
+
         curLimit = (totalSum / curAmount);
 
         if (totalSum > 1) {
@@ -171,7 +178,6 @@ function Transactions({setTab}:props) {
             curAmount = 0.0;
             totalSum = 0.0;
             curLimit = 0.0;
-            profitSum = 0.0;
             setCoinInfo({curAmount, totalSum, curLimit, profitSum});
         }
 
@@ -211,8 +217,9 @@ function Transactions({setTab}:props) {
             setDataExists(true);
             setDatabaseExists(true)
 
-            calculateCoin(query);
-            setProfit(checkProfit(query));
+            const profit = checkProfit(query)
+            setProfit(profit);
+            calculateCoin(query, profit);
           } else {
             setDataExists(false);
             setDatabaseExists(true)
