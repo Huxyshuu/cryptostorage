@@ -157,7 +157,7 @@ function Transactions({setTab}:props) {
         let profitSum = 0;
 
         query.forEach((entry) => {
-            curAmount += entry.amount - (entry.amount * 0.005) // amount - fee
+            curAmount += entry.amount - (entry.amount * 0.001) // amount - fee
 
             const total = entry.amount * entry.value 
             totalSum += total

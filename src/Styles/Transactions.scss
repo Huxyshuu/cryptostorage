@@ -13,6 +13,10 @@
             @include buttonStyling;
             margin-inline: 0.2rem;
 
+            &:focus {
+                outline-color: $main-light;
+            }
+
         }
 
         .grayed {
@@ -426,6 +430,10 @@
                 
                 &:active {
                     background-color: darken($white,10%);
+                }
+
+                &:focus {
+                    outline-color: $main-light;
                 }
             }
         }
