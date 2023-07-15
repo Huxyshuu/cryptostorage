@@ -165,7 +165,17 @@ function Transactions({setTab}:props) {
         })
         curLimit = (totalSum / curAmount);
 
-        setCoinInfo({curAmount, totalSum, curLimit, profitSum});
+        if (totalSum > 1) {
+            setCoinInfo({curAmount, totalSum, curLimit, profitSum});
+        } else {
+            curAmount = 0.0;
+            totalSum = 0.0;
+            curLimit = 0.0;
+            profitSum = 0.0;
+            setCoinInfo({curAmount, totalSum, curLimit, profitSum});
+        }
+
+        
     }
 
     const checkProfit = (query: Array<object>) => {
@@ -261,6 +271,7 @@ function Transactions({setTab}:props) {
                     <p>{(coinInfo.totalSum).toFixed(2)} €</p>
                     <p>{(coinInfo.curLimit).toFixed(2)} €</p>
                     <p>{(coinInfo.profitSum).toFixed(2)} €</p>
+                    
                 </div>
             </div>
 
