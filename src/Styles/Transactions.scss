@@ -22,7 +22,8 @@
         .grayed {
                 background-color: $grey;
                 color: white;
-            }
+                border: none;
+        }
     }
 }
 
@@ -145,6 +146,7 @@
                     padding-left: 0.1rem;
                     padding-block: 0.2rem;
                     background-color: $sec-light;
+                    border-bottom-left-radius: 0;
     
                     &:hover {
                         cursor: pointer;
@@ -468,6 +470,101 @@
                 font-size: 1rem;
                 font-weight: 400;
                 margin-inline: 2rem;
+
+                &:hover {
+                    cursor: pointer;
+                    color: $main-light;
+                    background-color: $white;
+                }
+                
+                &:active {
+                    background-color: darken($white,10%);
+                }
+
+                &:focus {
+                    outline-color: $main-light;
+                }
+            }
+        }
+    }
+
+    #addingCoinLayout {
+        position: absolute;
+        top: 65vh;
+        background-color: fade-out($sec-light, 0.1);
+        border-radius: 0.5rem;
+        border: 0.2rem solid $main-dark;
+        height: 11rem;
+        margin-block: auto;
+        width: 80%;
+
+        .entryHeader {
+            display: flex;
+            margin-inline: 1rem;
+
+            h4 {
+                margin-block: 0.5rem;
+                color: $white;
+                font-weight: 300;
+            }
+        }
+
+        div {
+            display: flex;
+            width: auto;
+
+            .titles {
+                display: flex;
+                flex-direction: column;
+                p {
+                    width: 8rem;
+                    border-right: $main-light 0.1rem solid;
+                    border-radius: 0;
+                }  
+            }
+    
+            .info {
+                display: flex;
+                flex-direction: column;
+                input {
+                    @include coinStyle;
+                    background-color: darken($white, 10%);
+                    color: black;
+                    border: 0;
+                    border-left: 0.1rem solid $main-dark;
+                    border-bottom: 0.1rem solid $main-dark;
+                    width: 35rem;
+                    height: 1.95rem;
+                    padding: 0;
+                    border-radius: 0;
+    
+                    &:focus {
+                        outline: none;
+                        border:1px solid $main-light;
+                        box-shadow: 0 0 1rem $sec-light;
+                        font-size: 1.5rem;
+                    }
+                }
+            }
+        }
+
+        .addButton {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: -1rem;
+
+            input, button {
+                @include buttonStyling;
+                color: black;
+                background-color: darken($white, 10%);
+                box-shadow: 0 0 0.2rem $main-dark;
+                font-size: 1rem;
+                font-weight: 400;
+                margin-inline: 2rem;
+                margin-top: 1rem;
 
                 &:hover {
                     cursor: pointer;

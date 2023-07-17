@@ -17,6 +17,7 @@ function Transactions({setTab}:props) {
     const [editingLayout, setEditingLayout] = useState(false);
     const [removingLayout, setRemovingLayout] = useState(false);
     const [selectingCoin, setSelectingCoin] = useState(false);
+    const [addingCoinLayout, setAddingCoin] = useState(false);
     
     const [removeActive, setRemoveActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
@@ -38,7 +39,25 @@ function Transactions({setTab}:props) {
         profitSum: 0.0
     })
     const [profit, setProfit] = useState([{}])
-    const [selectedCoin, setSelectedCoin] = useState({coin: "", img: ""});
+    const [selectedCoin, setSelectedCoin] = useState({coin: "ETH", img: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"});
+
+    const activateCoinAdding = () => {
+        setAddingCoin(!addingCoinLayout);
+        setAddingLayout(false);
+        setRemoveActive(false);
+        setEditingActive(false);
+        setEditingLayout(false);
+        setRemovingLayout(false);
+    }
+
+    const addCoin = (event: React.FormEvent) => {
+        event.preventDefault();
+        const name = (event.target as HTMLFormElement)[0].value;
+        const short = (event.target as HTMLFormElement)[1].value;
+        const image = (event.target as HTMLFormElement)[2].value;
+
+        console.log(name, short, image);
+    }
 
     const addEntry = () => {
         setAddingLayout(!addingLayout);
@@ -46,6 +65,7 @@ function Transactions({setTab}:props) {
         setEditingActive(false);
         setEditingLayout(false);
         setRemovingLayout(false);
+        setAddingCoin(false);
     }
 
     const confirmAdd = async (event: React.FormEvent) => {
@@ -75,6 +95,7 @@ function Transactions({setTab}:props) {
         setAddingLayout(false);
         setEditingLayout(false);
         setRemovingLayout(false);
+        setAddingCoin(false);
     }
 
     const activateEditing = () => {
@@ -83,6 +104,7 @@ function Transactions({setTab}:props) {
         setAddingLayout(false);
         setEditingLayout(false);
         setRemovingLayout(false);
+        setAddingCoin(false);
     }
 
     const editEntry = async (entry: React.BaseSyntheticEvent, entryId: number) => {
@@ -180,11 +202,13 @@ function Transactions({setTab}:props) {
 
         curLimit = (totalSum / curAmount);
 
-        if (totalSum > 1) {
-            setCoinInfo({curAmount, totalSum, curLimit, profitSum});
-        } else {
-            setCoinInfo({curAmount, totalSum, curLimit, profitSum});
+        if (curAmount < 0 || totalSum < 0) {
+            curAmount = 0;
+            totalSum = 0;
+            curLimit = 0;
         }
+
+        setCoinInfo({curAmount, totalSum, curLimit, profitSum});
     }
 
     const checkProfit = (query: Array<object>) => {
@@ -253,6 +277,7 @@ function Transactions({setTab}:props) {
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
+                    <button onClick={activateCoinAdding} className={`newCoin ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
                     <button onClick={addEntry} className={ addingLayout ? "grayed" : ""}>Add</button>
                     <button onClick={activateEditing} className={ editingActive ? "grayed" : ""}>Edit</button>
                     <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
@@ -294,7 +319,7 @@ function Transactions({setTab}:props) {
                     : null}
                     <p>{(coinInfo.curAmount).toFixed(5)}</p>
                     <p>{(coinInfo.totalSum).toFixed(2)} €</p>
-                    <p>{(coinInfo.curLimit).toFixed(2)} €</p>
+                    <p>{(coinInfo.curLimit).toFixed(5)} €</p>
                     <p>{(coinInfo.profitSum).toFixed(2)} €</p>
                     
                 </div>
@@ -343,8 +368,8 @@ function Transactions({setTab}:props) {
                             }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p className="date">{transaction.date}</p>
-                                <p>{value.toFixed(2)} €</p>
-                                <p className="amount">{amount.toFixed(5)}</p>
+                                <p>{value.toFixed(4)} €</p>
+                                <p className="amount">{amount.toFixed(4)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{Math.abs(fee.toFixed(2))} €</p>
                                 {profitData ? 
@@ -468,6 +493,34 @@ function Transactions({setTab}:props) {
                         <input type="submit" form="addForm" value="Remove"/>
                         <button onClick={() => setRemovingLayout(false)}>Cancel</button>
                     </div>
+                </div>
+                :
+                <>
+                </>}
+
+                {addingCoinLayout ? 
+                <div id="addingCoinLayout">
+                    <div className="entryHeader">
+                        <h4>Adding a new coin</h4>
+                    </div>
+                    <div>
+                        <div className="titles">
+                            <p>Name</p>
+                            <p>Abbrev.</p>
+                            <p>Image</p>
+                        </div>
+                        <form id="addForm" onSubmit={(e: React.FormEvent): void => {addCoin(e)}} className="info"> 
+                            <input type="text" id="name"/>
+                            <input type="text" id="short"/>
+                            <input type="text" id="image"/>
+                        </form>
+                        <div className="addButton">
+                            <input type="submit" form="addForm" value="Add"/>
+                            <button onClick={() => setAddingCoin(false)}>Cancel</button>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
                 :
                 <>

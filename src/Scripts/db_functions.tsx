@@ -143,8 +143,10 @@ export function getDatabase() {
 }
 
 export function createTable() {
-    const sql = 'CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
     if (db !== null) {
+        let sql = 'CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
+        db.run(sql);
+        sql = 'CREATE TABLE IF NOT EXISTS coins(id INTEGER PRIMARY KEY, coin, short, img)';
         db.run(sql);
     }
 }
