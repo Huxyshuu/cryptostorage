@@ -10,8 +10,6 @@ if (currentDatabase) {
     db = openDatabase(currentDatabase);
 }
 
-
-
 export function addDatabase(event: React.ChangeEvent): void {
     if (event.target !== null) {
         const ev = (event.target as HTMLInputElement).files;
@@ -198,7 +196,7 @@ export function queryData(database: any, coin: string): Promise<object[]> {
                   resolve(queriedData);
                   console.log(queriedData);
                 }
-              });
+            });
         } else {
             const sql = 'SELECT * FROM transactions';
             database.all(sql, [], (err, rows) => {
@@ -209,9 +207,8 @@ export function queryData(database: any, coin: string): Promise<object[]> {
                   resolve(queriedData);
                   console.log(queriedData);
                 }
-              });
+            });
         }
-        
       } else {
         reject(new Error("No database selected"));
       }

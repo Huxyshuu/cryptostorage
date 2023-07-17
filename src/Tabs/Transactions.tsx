@@ -238,7 +238,7 @@ function Transactions({setTab}:props) {
 
     useEffect(() => {
         renderData();
-    }, [])
+    }, [selectedCoin])
 
     interface Transaction {
         taxed: { checked: boolean };
