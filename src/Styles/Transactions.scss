@@ -114,18 +114,6 @@
             }
         }
 
-        .no-radius {
-            img {
-                border-bottom-left-radius: 0;
-                border-left: $white solid 0.1rem;
-                padding-left: 0.05rem;
-            }
-
-            &:hover > *{
-                background-color: darken($sec-light, 10%);
-            }
-        }
-
         & > p {
             @include coinStyle;
             background-color: $sec-light;
@@ -140,13 +128,12 @@
             position: absolute;
             display: flex;
             flex-direction: column;
-            top: 8.2rem;
+            top: 6.1rem;
             height: 10rem;
             width: 15.8%;
             background-color: $sec-light;
             border: $white solid 0.1rem;
             border-top: none;
-            padding-top: 0.2rem;
             
             div {
                 display: flex;
@@ -155,7 +142,6 @@
                 
                 img {
                     aspect-ratio: 1 / 1;
-                    border-bottom-left-radius: 0.5rem;
                     padding-left: 0.1rem;
                     padding-block: 0.2rem;
                     background-color: $sec-light;

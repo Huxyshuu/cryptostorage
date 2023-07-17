@@ -37,6 +37,7 @@ function Transactions({setTab}:props) {
         profitSum: 0.0
     })
     const [profit, setProfit] = useState([{}])
+    const [selectedCoin, setSelectedCoin] = useState("");
 
     const addEntry = () => {
         setAddingLayout(!addingLayout);
@@ -150,6 +151,12 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
+    const selectCoin = (coin: string) => {
+        setSelectedCoin(coin);
+        setSelectingCoin(false);
+        renderData();
+    }
+
     const calculateCoin = (query: Array<object>, profit: Array<object>) => {
 
         let curAmount = 0;
@@ -177,8 +184,6 @@ function Transactions({setTab}:props) {
         } else {
             setCoinInfo({curAmount, totalSum, curLimit, profitSum});
         }
-
-        
     }
 
     const checkProfit = (query: Array<object>) => {
@@ -207,7 +212,7 @@ function Transactions({setTab}:props) {
 
     const renderData = async () => {
         try {
-          const query = await queryData(getDatabase());
+          const query = await queryData(getDatabase(), selectedCoin);
           
           if (query.length > 0) {
             setData(query);
@@ -262,7 +267,7 @@ function Transactions({setTab}:props) {
                     <p>Profit Sum</p>
                 </div>
                 <div className="info">
-                    <div className={ selectingCoin ? "no-radius" : ""}>
+                    <div>
                         <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="eth" />
                         <p onClick={() => setSelectingCoin(!selectingCoin)}>Ethereum</p>
                         <div>
@@ -273,12 +278,16 @@ function Transactions({setTab}:props) {
                     { selectingCoin ? 
                     <div className="selectCoin">
                         <div>
+                            <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="eth" />
+                            <p onClick={() => selectCoin("ETH")}>Ethereum</p>
+                        </div>
+                        <div>
                             <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="eth" />
-                            <p onClick={() => setSelectingCoin(!selectingCoin)}>Bitcoin</p>
+                            <p onClick={() => selectCoin("BTC")}>Bitcoin</p>
                         </div>
                         <div>
                             <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="eth" />
-                            <p onClick={() => setSelectingCoin(!selectingCoin)}>Dogecoin</p>
+                            <p onClick={() => selectCoin("DOGE")}>Dogecoin</p>
                         </div>
                     </div>
                     : null}

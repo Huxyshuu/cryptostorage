@@ -182,21 +182,36 @@ export function insertData(database: any, data: TransactionData): Promise<void> 
     });
 }
 
-export function queryData(database: any): Promise<object[]> {
+export function queryData(database: any, coin: string): Promise<object[]> {
     return new Promise<object[]>((resolve, reject) => {
       const queriedData: object[] = [];
-      const sql = 'SELECT * FROM transactions WHERE coin = "ETH"';
+      console.log(coin);
   
       if (database !== null) {
-        database.all(sql, [], (err, rows) => {
-          if (err) {
-            reject(err);
-          } else {
-            rows.forEach(row => queriedData.unshift(row));
-            resolve(queriedData);
-            console.log(queriedData);
-          }
-        });
+        if (coin) {
+            const sql = 'SELECT * FROM transactions WHERE coin = ?';
+            database.all(sql, coin, (err, rows) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  rows.forEach(row => queriedData.unshift(row));
+                  resolve(queriedData);
+                  console.log(queriedData);
+                }
+              });
+        } else {
+            const sql = 'SELECT * FROM transactions';
+            database.all(sql, [], (err, rows) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  rows.forEach(row => queriedData.unshift(row));
+                  resolve(queriedData);
+                  console.log(queriedData);
+                }
+              });
+        }
+        
       } else {
         reject(new Error("No database selected"));
       }
