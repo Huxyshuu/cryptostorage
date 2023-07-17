@@ -24,6 +24,7 @@ function Transactions({setTab}:props) {
     const [data, setData] = useState([{}]);
     const [entryInfo, setEntryInfo] = useState({
         id: 0,
+        coin: "",
         taxed: false,
         date: "",
         value: 0.0,
@@ -37,7 +38,7 @@ function Transactions({setTab}:props) {
         profitSum: 0.0
     })
     const [profit, setProfit] = useState([{}])
-    const [selectedCoin, setSelectedCoin] = useState("");
+    const [selectedCoin, setSelectedCoin] = useState({coin: "", img: ""});
 
     const addEntry = () => {
         setAddingLayout(!addingLayout);
@@ -51,6 +52,7 @@ function Transactions({setTab}:props) {
         try {
             event.preventDefault();
             await insertData(getDatabase(), {
+                coin: selectedCoin.coin,
                 taxed: (event.target as HTMLFormElement)[0],
                 date: (event.target as HTMLFormElement)[1],
                 value: (event.target as HTMLFormElement)[2],
@@ -101,7 +103,7 @@ function Transactions({setTab}:props) {
         const value = parseFloat(entry.children[2].innerHTML);
         const amount = parseFloat(entry.children[3].innerHTML);
 
-        setEntryInfo({id: id, taxed: taxed, date: date, value: value, amount: amount})
+        setEntryInfo({id: id, coin: selectedCoin.coin, taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingLayout(true);
         setEditingActive(true);
@@ -110,7 +112,7 @@ function Transactions({setTab}:props) {
 
     const confirmEdit = async (event: React.FormEvent) => {
         event.preventDefault();
-        const editedInfo = {id: entryInfo.id ,taxed: event.target[0].checked, date: event.target[1].value, value: parseFloat(event.target[2].value), amount: parseFloat(event.target[3].value)}
+        const editedInfo = {id: entryInfo.id, coin: entryInfo.coin ,taxed: event.target[0].checked, date: event.target[1].value, value: parseFloat(event.target[2].value), amount: parseFloat(event.target[3].value)}
         if (JSON.stringify(editedInfo) === JSON.stringify(entryInfo)) {
             setEditingLayout(false);
             return
@@ -151,10 +153,9 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const selectCoin = (coin: string) => {
+    const selectCoin = (coin: object) => {
         setSelectedCoin(coin);
         setSelectingCoin(false);
-        renderData();
     }
 
     const calculateCoin = (query: Array<object>, profit: Array<object>) => {
@@ -212,7 +213,7 @@ function Transactions({setTab}:props) {
 
     const renderData = async () => {
         try {
-          const query = await queryData(getDatabase(), selectedCoin);
+          const query = await queryData(getDatabase(), selectedCoin.coin);
           
           if (query.length > 0) {
             setData(query);
@@ -268,8 +269,8 @@ function Transactions({setTab}:props) {
                 </div>
                 <div className="info">
                     <div>
-                        <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="eth" />
-                        <p onClick={() => setSelectingCoin(!selectingCoin)}>Ethereum</p>
+                        <img src={selectedCoin.img} alt={selectedCoin.coin} />
+                        <p onClick={() => setSelectingCoin(!selectingCoin)}>{selectedCoin.coin.toUpperCase()}</p>
                         <div>
                             <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
                             <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
@@ -279,15 +280,15 @@ function Transactions({setTab}:props) {
                     <div className="selectCoin">
                         <div>
                             <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin("ETH")}>Ethereum</p>
+                            <p onClick={() => selectCoin({coin: "ETH", img: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"})}>ETH</p>
                         </div>
                         <div>
                             <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin("BTC")}>Bitcoin</p>
+                            <p onClick={() => selectCoin({coin: "BTC", img: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025"})}>BTC</p>
                         </div>
                         <div>
                             <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin("DOGE")}>Dogecoin</p>
+                            <p onClick={() => selectCoin({coin: "DOGE", img: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025"})}>DOGE</p>
                         </div>
                     </div>
                     : null}

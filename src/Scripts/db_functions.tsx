@@ -150,6 +150,7 @@ export function createTable() {
 }
 
 interface TransactionData {
+    coin: string;
     taxed: { checked: boolean };
     date: { value: string };
     value: { value: string };
@@ -158,8 +159,9 @@ interface TransactionData {
 
 export function insertData(database: any, data: TransactionData): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES ("ETH", ?, ?, ?, ?)'
+        const sql = 'INSERT INTO transactions (coin, taxed, date, value, amount) VALUES (?, ?, ?, ?, ?)'
         const params = [
+            data.coin,
             data.taxed.checked, 
             data.date.value, 
             parseFloat(data.value.value), 
@@ -183,7 +185,6 @@ export function insertData(database: any, data: TransactionData): Promise<void> 
 export function queryData(database: any, coin: string): Promise<object[]> {
     return new Promise<object[]>((resolve, reject) => {
       const queriedData: object[] = [];
-      console.log(coin);
   
       if (database !== null) {
         if (coin) {
@@ -194,7 +195,6 @@ export function queryData(database: any, coin: string): Promise<object[]> {
                 } else {
                   rows.forEach(row => queriedData.unshift(row));
                   resolve(queriedData);
-                  console.log(queriedData);
                 }
             });
         } else {
@@ -205,7 +205,6 @@ export function queryData(database: any, coin: string): Promise<object[]> {
                 } else {
                   rows.forEach(row => queriedData.unshift(row));
                   resolve(queriedData);
-                  console.log(queriedData);
                 }
             });
         }
@@ -216,7 +215,8 @@ export function queryData(database: any, coin: string): Promise<object[]> {
 }
 
 interface EntryInfo {
-    id: number,
+    id: number;
+    coin: string;
     taxed: boolean;
     date: string;
     value: number;
@@ -226,9 +226,10 @@ interface EntryInfo {
 export function editData(database, data: EntryInfo): Promise<void> {
     return new Promise<void>((resolve, reject) => {
         const sql = `UPDATE transactions
-                     SET coin = "ETH", taxed = ?, date = ?, value = ?, amount = ?
+                     SET coin = ?, taxed = ?, date = ?, value = ?, amount = ?
                      WHERE id = ?`
                      const params = [
+                        data.coin,
                         data.taxed, 
                         data.date, 
                         data.value, 
