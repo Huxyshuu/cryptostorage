@@ -185,7 +185,7 @@ export function insertData(database: any, data: TransactionData): Promise<void> 
 export function queryData(database: any): Promise<object[]> {
     return new Promise<object[]>((resolve, reject) => {
       const queriedData: object[] = [];
-      const sql = 'SELECT * FROM transactions';
+      const sql = 'SELECT * FROM transactions WHERE coin = "ETH"';
   
       if (database !== null) {
         database.all(sql, [], (err, rows) => {
@@ -194,6 +194,7 @@ export function queryData(database: any): Promise<object[]> {
           } else {
             rows.forEach(row => queriedData.unshift(row));
             resolve(queriedData);
+            console.log(queriedData);
           }
         });
       } else {

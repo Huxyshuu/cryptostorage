@@ -16,6 +16,7 @@ function Transactions({setTab}:props) {
     const [addingLayout, setAddingLayout] = useState(false);
     const [editingLayout, setEditingLayout] = useState(false);
     const [removingLayout, setRemovingLayout] = useState(false);
+    const [selectingCoin, setSelectingCoin] = useState(false);
     
     const [removeActive, setRemoveActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
@@ -261,15 +262,26 @@ function Transactions({setTab}:props) {
                     <p>Profit Sum</p>
                 </div>
                 <div className="info">
-                    <div>
+                    <div className={ selectingCoin ? "no-radius" : ""}>
                         <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="eth" />
-                        <p>Etherium</p>
+                        <p onClick={() => setSelectingCoin(!selectingCoin)}>Ethereum</p>
                         <div>
-                            <Icon className="arrows" icon={upSolid} />
-                            <Icon className="arrows" icon={upSolid} rotate={2} />
+                            <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
+                            <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
                         </div>
-                        
                     </div>
+                    { selectingCoin ? 
+                    <div className="selectCoin">
+                        <div>
+                            <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="eth" />
+                            <p onClick={() => setSelectingCoin(!selectingCoin)}>Bitcoin</p>
+                        </div>
+                        <div>
+                            <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="eth" />
+                            <p onClick={() => setSelectingCoin(!selectingCoin)}>Dogecoin</p>
+                        </div>
+                    </div>
+                    : null}
                     <p>{(coinInfo.curAmount).toFixed(5)}</p>
                     <p>{(coinInfo.totalSum).toFixed(2)} €</p>
                     <p>{(coinInfo.curLimit).toFixed(2)} €</p>
