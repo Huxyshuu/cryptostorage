@@ -17,7 +17,6 @@ function Transactions({setTab}:props) {
     const [editingLayout, setEditingLayout] = useState(false);
     const [removingLayout, setRemovingLayout] = useState(false);
     const [selectingCoin, setSelectingCoin] = useState(false);
-    const [addingCoinLayout, setAddingCoin] = useState(false);
     
     const [removeActive, setRemoveActive] = useState(false);
     const [editingActive, setEditingActive] = useState(false);
@@ -43,44 +42,11 @@ function Transactions({setTab}:props) {
     const [allCoins, setAllCoins] = useState([{}])
 
     const activateCoinAdding = () => {
-        setAddingCoin(!addingCoinLayout);
         setAddingLayout(false);
         setRemoveActive(false);
         setEditingActive(false);
         setEditingLayout(false);
         setRemovingLayout(false);
-    }
-
-    const addCoin = async (event: React.FormEvent) => {
-        event.preventDefault();
-        const name = (event.target as HTMLFormElement)[0].value;
-        const short = (event.target as HTMLFormElement)[1].value;
-        const image = (event.target as HTMLFormElement)[2].value;
-
-        const newCoin = {name: name, short: short, img: image};
-        
-        const existingCoins = await queryCoins(getDatabase());
-        
-        let coinExists = false;
-
-        existingCoins.forEach(coin => {
-            if (coin.name === newCoin.name && coin.short === newCoin.short) {
-                if (coin.img === newCoin.img) {
-                    console.log("Coin exists already");
-                } else {
-                    console.log("Updating coin image...");
-                    updateCoin(getDatabase(), newCoin)
-                    setAddingCoin(false);
-                }
-                coinExists = true;
-            }
-        });
-
-        if (!coinExists) {
-            insertCoin(getDatabase(), newCoin)
-            setSelectedCoin(newCoin);
-            setAddingCoin(false);
-        }
     }
 
     const addEntry = () => {
@@ -89,7 +55,6 @@ function Transactions({setTab}:props) {
         setEditingActive(false);
         setEditingLayout(false);
         setRemovingLayout(false);
-        setAddingCoin(false);
     }
 
     const confirmAdd = async (event: React.FormEvent) => {
@@ -119,7 +84,6 @@ function Transactions({setTab}:props) {
         setAddingLayout(false);
         setEditingLayout(false);
         setRemovingLayout(false);
-        setAddingCoin(false);
     }
 
     const activateEditing = () => {
@@ -128,7 +92,6 @@ function Transactions({setTab}:props) {
         setAddingLayout(false);
         setEditingLayout(false);
         setRemovingLayout(false);
-        setAddingCoin(false);
     }
 
     const editEntry = async (entry: React.BaseSyntheticEvent, entryId: number) => {
@@ -313,7 +276,6 @@ function Transactions({setTab}:props) {
             <div className="header">
                 <h1>Transactions</h1>
                 <div>
-                    <button onClick={activateCoinAdding} className={`newCoin ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
                     <button onClick={addEntry} className={ addingLayout ? "grayed" : ""}>Add</button>
                     <button onClick={activateEditing} className={ editingActive ? "grayed" : ""}>Edit</button>
                     <button onClick={activateRemove} className={ removeActive ? "grayed" : ""}>Remove</button>
@@ -530,35 +492,6 @@ function Transactions({setTab}:props) {
                 :
                 <>
                 </>}
-
-                {addingCoinLayout ? 
-                <div id="addingCoinLayout">
-                    <div className="entryHeader">
-                        <h4>Adding a new coin</h4>
-                    </div>
-                    <div>
-                        <div className="titles">
-                            <p>Name</p>
-                            <p>Abbrev.</p>
-                            <p>Image</p>
-                        </div>
-                        <form id="addForm" onSubmit={(e: React.FormEvent): void => {addCoin(e)}} className="info"> 
-                            <input type="text" id="name"/>
-                            <input type="text" id="short"/>
-                            <input type="text" id="image"/>
-                        </form>
-                        <div className="addButton">
-                            <input type="submit" form="addForm" value="Add"/>
-                            <button onClick={() => setAddingCoin(false)}>Cancel</button>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                :
-                <>
-                </>}
-                
             </div>
         </div>
     )
