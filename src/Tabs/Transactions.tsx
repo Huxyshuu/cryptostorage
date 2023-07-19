@@ -70,7 +70,7 @@ function Transactions({setTab}:props) {
                 } else {
                     console.log("Updating coin image...");
                     updateCoin(getDatabase(), newCoin)
-                    setSelectingCoin(false);
+                    setAddingCoin(false);
                 }
                 coinExists = true;
             }
@@ -79,7 +79,7 @@ function Transactions({setTab}:props) {
         if (!coinExists) {
             insertCoin(getDatabase(), newCoin)
             setSelectedCoin(newCoin);
-            setSelectingCoin(false);
+            setAddingCoin(false);
         }
     }
 
@@ -200,6 +200,7 @@ function Transactions({setTab}:props) {
     }
 
     const selectCoin = (coin: object) => {
+        console.log(selectedCoin);
         setSelectedCoin(coin);
         setSelectingCoin(false);
     }
@@ -261,7 +262,7 @@ function Transactions({setTab}:props) {
 
     const renderData = async () => {
         try {
-          const query = await queryData(getDatabase(), selectedCoin.name);
+          const query = await queryData(getDatabase(), selectedCoin.short);
           
           if (query.length > 0) {
             setData(query);
@@ -281,11 +282,12 @@ function Transactions({setTab}:props) {
         }
 
         const coins = await queryCoins(getDatabase());
-        console.log(coins);
         setAllCoins(coins);
         if (selectedCoin.name == undefined) {
             setSelectedCoin(coins[0])
         }
+
+        console.log("Spam?");
     };
 
     const goToDatabase = () => {
@@ -326,7 +328,7 @@ function Transactions({setTab}:props) {
                 <div className="info">
                     <div>
                         <img src={selectedCoin.img} alt={selectedCoin.name} />
-                        <p onClick={() => setSelectingCoin(!selectingCoin)}>{selectedCoin.short}</p>
+                        <p onClick={() => setSelectingCoin(true)}>{selectedCoin.short}</p>
                         <div>
                             <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
                             <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
@@ -336,7 +338,7 @@ function Transactions({setTab}:props) {
                     <div className="selectCoin">
                         {allCoins.map(coin => {
                             return (
-                            <div>
+                            <div key={`${coin.name}-item`}>
                                 <img src={coin.img} alt={coin.name} />
                                 <p onClick={() => selectCoin(coin)}>{coin.short}</p>
                             </div>
