@@ -340,7 +340,7 @@ function Transactions({setTab}:props) {
                             return (
                             <div key={`${coin.name}-item`}>
                                 <img src={coin.img} alt={coin.name} />
-                                <p onClick={() => selectCoin(coin)}>{coin.short}</p>
+                                <p onClick={() => selectCoin(coin)}>{coin.name.length > 9 ? coin.short : coin.name}</p>
                             </div>
                             )
                             
