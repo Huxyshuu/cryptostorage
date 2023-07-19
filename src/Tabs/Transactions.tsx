@@ -70,13 +70,16 @@ function Transactions({setTab}:props) {
                 } else {
                     console.log("Updating coin image...");
                     updateCoin(getDatabase(), newCoin)
+                    setSelectingCoin(false);
                 }
                 coinExists = true;
             }
         });
-        
+
         if (!coinExists) {
             insertCoin(getDatabase(), newCoin)
+            setSelectedCoin(newCoin);
+            setSelectingCoin(false);
         }
     }
 
@@ -278,8 +281,11 @@ function Transactions({setTab}:props) {
         }
 
         const coins = await queryCoins(getDatabase());
+        console.log(coins);
         setAllCoins(coins);
-        setSelectedCoin(coins[0]);
+        if (selectedCoin.name == undefined) {
+            setSelectedCoin(coins[0])
+        }
     };
 
     const goToDatabase = () => {
@@ -288,7 +294,7 @@ function Transactions({setTab}:props) {
 
     useEffect(() => {
         renderData();
-    }, [selectedCoin, allCoins])
+    }, [selectedCoin])
 
     interface Transaction {
         taxed: { checked: boolean };
