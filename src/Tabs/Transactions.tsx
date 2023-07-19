@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import 'Styles/Transactions.scss';
-import {getDatabase, insertData, queryData, editData, deleteData} from '../Scripts/db_functions.tsx';
+import {getDatabase, insertData, insertCoin, queryData, queryCoins, updateCoin, editData, deleteData} from '../Scripts/db_functions.tsx';
 import { Icon } from '@iconify/react';
 import upSolid from '@iconify/icons-teenyicons/up-solid';
 
@@ -39,7 +39,8 @@ function Transactions({setTab}:props) {
         profitSum: 0.0
     })
     const [profit, setProfit] = useState([{}])
-    const [selectedCoin, setSelectedCoin] = useState({coin: "ETH", img: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"});
+    const [selectedCoin, setSelectedCoin] = useState({});
+    const [allCoins, setAllCoins] = useState([{}])
 
     const activateCoinAdding = () => {
         setAddingCoin(!addingCoinLayout);
@@ -50,13 +51,33 @@ function Transactions({setTab}:props) {
         setRemovingLayout(false);
     }
 
-    const addCoin = (event: React.FormEvent) => {
+    const addCoin = async (event: React.FormEvent) => {
         event.preventDefault();
         const name = (event.target as HTMLFormElement)[0].value;
         const short = (event.target as HTMLFormElement)[1].value;
         const image = (event.target as HTMLFormElement)[2].value;
 
-        console.log(name, short, image);
+        const newCoin = {name: name, short: short, img: image};
+        
+        const existingCoins = await queryCoins(getDatabase());
+        
+        let coinExists = false;
+
+        existingCoins.forEach(coin => {
+            if (coin.name === newCoin.name && coin.short === newCoin.short) {
+                if (coin.img === newCoin.img) {
+                    console.log("Coin exists already");
+                } else {
+                    console.log("Updating coin image...");
+                    updateCoin(getDatabase(), newCoin)
+                }
+                coinExists = true;
+            }
+        });
+        
+        if (!coinExists) {
+            insertCoin(getDatabase(), newCoin)
+        }
     }
 
     const addEntry = () => {
@@ -72,7 +93,7 @@ function Transactions({setTab}:props) {
         try {
             event.preventDefault();
             await insertData(getDatabase(), {
-                coin: selectedCoin.coin,
+                coin: selectedCoin.name,
                 taxed: (event.target as HTMLFormElement)[0],
                 date: (event.target as HTMLFormElement)[1],
                 value: (event.target as HTMLFormElement)[2],
@@ -125,7 +146,7 @@ function Transactions({setTab}:props) {
         const value = parseFloat(entry.children[2].innerHTML);
         const amount = parseFloat(entry.children[3].innerHTML);
 
-        setEntryInfo({id: id, coin: selectedCoin.coin, taxed: taxed, date: date, value: value, amount: amount})
+        setEntryInfo({id: id, coin: selectedCoin.name, taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingLayout(true);
         setEditingActive(true);
@@ -237,7 +258,7 @@ function Transactions({setTab}:props) {
 
     const renderData = async () => {
         try {
-          const query = await queryData(getDatabase(), selectedCoin.coin);
+          const query = await queryData(getDatabase(), selectedCoin.name);
           
           if (query.length > 0) {
             setData(query);
@@ -255,6 +276,10 @@ function Transactions({setTab}:props) {
           setDataExists(false);
           setDatabaseExists(false);
         }
+
+        const coins = await queryCoins(getDatabase());
+        setAllCoins(coins);
+        setSelectedCoin(coins[0]);
     };
 
     const goToDatabase = () => {
@@ -263,7 +288,7 @@ function Transactions({setTab}:props) {
 
     useEffect(() => {
         renderData();
-    }, [selectedCoin])
+    }, [selectedCoin, allCoins])
 
     interface Transaction {
         taxed: { checked: boolean };
@@ -294,8 +319,8 @@ function Transactions({setTab}:props) {
                 </div>
                 <div className="info">
                     <div>
-                        <img src={selectedCoin.img} alt={selectedCoin.coin} />
-                        <p onClick={() => setSelectingCoin(!selectingCoin)}>{selectedCoin.coin.toUpperCase()}</p>
+                        <img src={selectedCoin.img} alt={selectedCoin.name} />
+                        <p onClick={() => setSelectingCoin(!selectingCoin)}>{selectedCoin.short}</p>
                         <div>
                             <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
                             <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
@@ -303,18 +328,15 @@ function Transactions({setTab}:props) {
                     </div>
                     { selectingCoin ? 
                     <div className="selectCoin">
-                        <div>
-                            <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin({coin: "ETH", img: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025"})}>ETH</p>
-                        </div>
-                        <div>
-                            <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin({coin: "BTC", img: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025"})}>BTC</p>
-                        </div>
-                        <div>
-                            <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="eth" />
-                            <p onClick={() => selectCoin({coin: "DOGE", img: "https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025"})}>DOGE</p>
-                        </div>
+                        {allCoins.map(coin => {
+                            return (
+                            <div>
+                                <img src={coin.img} alt={coin.name} />
+                                <p onClick={() => selectCoin(coin)}>{coin.short}</p>
+                            </div>
+                            )
+                            
+                        })}
                     </div>
                     : null}
                     <p>{(coinInfo.curAmount).toFixed(5)}</p>

@@ -146,7 +146,7 @@ export function createTable() {
     if (db !== null) {
         let sql = 'CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY, coin, taxed, date, value, amount)';
         db.run(sql);
-        sql = 'CREATE TABLE IF NOT EXISTS coins(id INTEGER PRIMARY KEY, coin, short, img)';
+        sql = 'CREATE TABLE IF NOT EXISTS coins(id INTEGER PRIMARY KEY, name, short, img)';
         db.run(sql);
     }
 }
@@ -214,6 +214,73 @@ export function queryData(database: any, coin: string): Promise<object[]> {
         reject(new Error("No database selected"));
       }
     });
+}
+
+interface CoinData {
+    name: string;
+    short: string;
+    img: string;
+}
+
+export function insertCoin(database: any, coin: CoinData): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        const sql = 'INSERT INTO coins (name, short, img) VALUES (?, ?, ?)'
+        const params = [
+            coin.name,
+            coin.short,
+            coin.img
+        ]
+
+        if (database !== null) {
+            database.all(sql, params, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            })
+        } else {
+            reject(new Error("No database selected"));
+        }
+    });
+}
+
+export function queryCoins(database: any): Promise<object[]> {
+    return new Promise<object[]>((resolve, reject) => {
+      const queriedCoins: object[] = [];
+  
+      if (database !== null) {
+        const sql = 'SELECT * FROM coins';
+            database.all(sql, [], (err, rows) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  rows.forEach(row => queriedCoins.unshift(row));
+                  resolve(queriedCoins);
+                }
+            });
+      } else {
+        reject(new Error("No database selected"));
+      }
+    });
+}
+
+export function updateCoin(database: any, coin: CoinData): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        if (database !== null) {
+          const sql = 'UPDATE coins SET img = ? WHERE short = ?';
+              database.run(sql, [coin.img, coin.short], (err) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve();
+                    console.log("Updated successfully!");
+                  }
+              });
+        } else {
+          reject(new Error("No database selected"));
+        }
+      });
 }
 
 interface EntryInfo {
