@@ -22,6 +22,12 @@ function Database() {
     }
   }
 
+  const falseLayouts = () => {
+    setAddingCoinLayout(false);
+    setEditingCoinLayout(false);
+    setRemovingCoinLayout(false);
+  }
+
   const addCoin = async (event: React.FormEvent) => {
     event.preventDefault();
     const name = (event.target as HTMLFormElement)[0].value;
@@ -104,15 +110,16 @@ function Database() {
         <p id="lastEdited">Last edited: -</p>
         <p id="fileSize">File size: -</p>
       </div>
-      <button onClick={() => setAddingCoinLayout(!addingCoinLayout)} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
-      <button onClick={() => setEditingCoinLayout(!editingCoinLayout)} className={`coinButton ${ editingCoinLayout ? "grayed" : ""}`}>Edit Coin</button>
-      <button onClick={() => setRemovingCoinLayout(!removingCoinLayout)} className={`coinButton ${ removingCoinLayout ? "grayed" : ""}`}>Remove Coin</button>
+      <button onClick={() => {falseLayouts(), setAddingCoinLayout(!addingCoinLayout)}} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
+      <button onClick={() => {falseLayouts(), setEditingCoinLayout(!editingCoinLayout)}} className={`coinButton ${ editingCoinLayout ? "grayed" : ""}`}>Edit Coin</button>
+      <button onClick={() => {falseLayouts(), setRemovingCoinLayout(!removingCoinLayout)}} className={`coinButton ${ removingCoinLayout ? "grayed" : ""}`}>Remove Coin</button>
 
 
-      {addingCoinLayout ? 
+      {addingCoinLayout || editingCoinLayout || removingCoinLayout ? 
         <div id="coinLayout">
             <div className="entryHeader">
-                <h4>Adding a new coin</h4>
+                <h4>{addingCoinLayout ? "Adding a new coin" 
+                : editingCoinLayout ? "Editing an existing coin" : "Removing an existing coin"}</h4>
             </div>
             <div>
                 <div className="titles">

@@ -93,6 +93,10 @@
                 }
             }
 
+            .rounded {
+                border-bottom-left-radius: 0.5rem;
+            }
+
             div {
                 display: flex;
                 flex-direction: column;

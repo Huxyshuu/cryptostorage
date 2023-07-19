@@ -194,7 +194,7 @@ function Transactions({setTab}:props) {
 
         curLimit = (totalSum / curAmount);
 
-        if (curAmount < 0 || totalSum < 0) {
+        if (curAmount <= 0 || totalSum <= 0) {
             curAmount = 0;
             totalSum = 0;
             curLimit = 0;
@@ -292,12 +292,19 @@ function Transactions({setTab}:props) {
                 </div>
                 <div className="info">
                     <div>
-                        <img src={selectedCoin.img} alt={selectedCoin.name} />
-                        <p onClick={() => setSelectingCoin(true)}>{selectedCoin.short}</p>
-                        <div>
-                            <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
-                            <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
-                        </div>
+                        { databaseExists ? 
+                        <>
+                            <img src={selectedCoin.img} alt={selectedCoin.name} />
+                            <p onClick={() => setSelectingCoin(true)}>{selectedCoin.short}</p>
+                            <div>
+                                <Icon onClick={() => console.log("up")} className="arrows" icon={upSolid} />
+                                <Icon onClick={() => console.log("down")} className="arrows" icon={upSolid} rotate={2} />
+                            </div>
+                        </>
+                        :
+                        <>
+                            <p className="rounded">{selectedCoin.short}</p>
+                        </>}
                     </div>
                     { selectingCoin ? 
                     <div className="selectCoin">
