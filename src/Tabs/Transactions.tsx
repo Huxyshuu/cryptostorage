@@ -96,7 +96,7 @@ function Transactions({setTab}:props) {
         try {
             event.preventDefault();
             await insertData(getDatabase(), {
-                coin: selectedCoin.name,
+                coin: selectedCoin.short,
                 taxed: (event.target as HTMLFormElement)[0],
                 date: (event.target as HTMLFormElement)[1],
                 value: (event.target as HTMLFormElement)[2],
@@ -149,7 +149,7 @@ function Transactions({setTab}:props) {
         const value = parseFloat(entry.children[2].innerHTML);
         const amount = parseFloat(entry.children[3].innerHTML);
 
-        setEntryInfo({id: id, coin: selectedCoin.name, taxed: taxed, date: date, value: value, amount: amount})
+        setEntryInfo({id: id, coin: selectedCoin.short, taxed: taxed, date: date, value: value, amount: amount})
 
         setEditingLayout(true);
         setEditingActive(true);
@@ -200,12 +200,16 @@ function Transactions({setTab}:props) {
     }
 
     const selectCoin = (coin: object) => {
-        console.log(selectedCoin);
         setSelectedCoin(coin);
         setSelectingCoin(false);
     }
 
     const calculateCoin = (query: Array<object>, profit: Array<object>) => {
+
+        if (query.length == 0) {
+            setCoinInfo({curAmount: 0, totalSum: 0, curLimit: 0, profitSum: 0});
+            return
+        }
 
         let curAmount = 0;
         let totalSum = 0;
@@ -275,6 +279,7 @@ function Transactions({setTab}:props) {
           } else {
             setDataExists(false);
             setDatabaseExists(true)
+            calculateCoin([], [])
           }
         } catch (error) {
           setDataExists(false);
@@ -286,8 +291,6 @@ function Transactions({setTab}:props) {
         if (selectedCoin.name == undefined) {
             setSelectedCoin(coins[0])
         }
-
-        console.log("Spam?");
     };
 
     const goToDatabase = () => {
@@ -398,8 +401,8 @@ function Transactions({setTab}:props) {
                             }}>
                                 <p>{transaction.taxed ? "X" : ""}</p>
                                 <p className="date">{transaction.date}</p>
-                                <p>{value.toFixed(4)} €</p>
-                                <p className="amount">{amount.toFixed(4)}</p>
+                                <p>{value < 0.0001 ? value.toFixed(8) : value.toFixed(4)} €</p>
+                                <p className="amount">{amount > 99999 ? amount : amount.toFixed(4)}</p>
                                 <p>{total.toFixed(2)} €</p>
                                 <p>{Math.abs(fee.toFixed(2))} €</p>
                                 {profitData ? 
