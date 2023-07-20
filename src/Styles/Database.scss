@@ -1,5 +1,10 @@
 @import '../Utilities/variables.scss';
 
+.database-content {
+    display: flex;
+    flex-direction: row;
+}
+
 .database-current {
     display: flex;
     flex-direction: row;
@@ -227,5 +232,26 @@
                 outline-color: $main-light;
             }
         }
+    }
+}
+
+.coinGrid {
+    margin-left: 2rem;
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    width: 10rem;
+    height: 23rem;
+    gap: 2rem 2rem;
+    align-content: flex-start;
+    border: $white solid 0.1rem;
+    box-shadow: 0 0 1rem 0.1rem inset $white;
+    background-color: $sec-light;
+    padding: 1rem;
+
+    img {
+        margin: 0;
+        width: 4rem;
+        height: 4rem;
     }
 }

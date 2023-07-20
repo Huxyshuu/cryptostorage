@@ -76,46 +76,47 @@ function Database() {
   })
 
   return (
-    <div className="content database">
-      <h1>Database</h1>
-      { creatingNew ? 
-      <div className="database-current">
-        <p className="text">New database name:</p>
-        <form onSubmit={(event: React.FormEvent<HTMLFormElement>): void => createNew(event)}>
-          <input type="text" name="databaseName"/>
-          <input type="submit" value="Create"/>
-        </form>
-      </div>
-      :
-      <div className="database-current">
-        <p className="text">Current database:</p>
-        <p className="current" id="currentDatabase">None</p>
-      </div>
-      }
-      
-      <div className="database-button">
+    <div className="database-content">
+      <div className="mainData">
+        <h1>Database</h1>
         { creatingNew ? 
-        <button onClick={() => setCreatingNew(false)}>Cancel</button>
+        <div className="database-current">
+          <p className="text">New database name:</p>
+          <form onSubmit={(event: React.FormEvent<HTMLFormElement>): void => createNew(event)}>
+            <input type="text" name="databaseName"/>
+            <input type="submit" value="Create"/>
+          </form>
+        </div>
         :
-        <button onClick={() => setCreatingNew(true)}>Create New</button>
+        <div className="database-current">
+          <p className="text">Current database:</p>
+          <p className="current" id="currentDatabase">None</p>
+        </div>
         }
-        <label htmlFor="database-file-add">Add Existing</label>
-        <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {addDatabase(event); setCreatingNew(false)}} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
-        <label htmlFor="database-file-change">Change</label>
-        <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {changeDatabase(event); setCreatingNew(false)}} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
-        <button onClick={() => {removeCurrentDatabase(); setCreatingNew(false)}}>Remove</button>
-      </div>
-      <div className="database-info">
-        <p id="dateAdded">Date added: -</p>
-        <p id="lastEdited">Last edited: -</p>
-        <p id="fileSize">File size: -</p>
-      </div>
-      <button onClick={() => {falseLayouts(), setAddingCoinLayout(!addingCoinLayout)}} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
-      <button onClick={() => {falseLayouts(), setEditingCoinLayout(!editingCoinLayout)}} className={`coinButton ${ editingCoinLayout ? "grayed" : ""}`}>Edit Coin</button>
-      <button onClick={() => {falseLayouts(), setRemovingCoinLayout(!removingCoinLayout)}} className={`coinButton ${ removingCoinLayout ? "grayed" : ""}`}>Remove Coin</button>
+        
+        <div className="database-button">
+          { creatingNew ? 
+          <button onClick={() => setCreatingNew(false)}>Cancel</button>
+          :
+          <button onClick={() => setCreatingNew(true)}>Create New</button>
+          }
+          <label htmlFor="database-file-add">Add Existing</label>
+          <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {addDatabase(event); setCreatingNew(false)}} type="file" id="database-file-add" name="database-file-add" accept=".db"/>
+          <label htmlFor="database-file-change">Change</label>
+          <input onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {changeDatabase(event); setCreatingNew(false)}} type="file" id="database-file-change" name="database-file-change" accept=".db"/>
+          <button onClick={() => {removeCurrentDatabase(); setCreatingNew(false)}}>Remove</button>
+        </div>
+        <div className="database-info">
+          <p id="dateAdded">Date added: -</p>
+          <p id="lastEdited">Last edited: -</p>
+          <p id="fileSize">File size: -</p>
+        </div>
+        <button onClick={() => {falseLayouts(), setAddingCoinLayout(!addingCoinLayout)}} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
+        <button onClick={() => {falseLayouts(), setEditingCoinLayout(!editingCoinLayout)}} className={`coinButton ${ editingCoinLayout ? "grayed" : ""}`}>Edit Coin</button>
+        <button onClick={() => {falseLayouts(), setRemovingCoinLayout(!removingCoinLayout)}} className={`coinButton ${ removingCoinLayout ? "grayed" : ""}`}>Remove Coin</button>
 
 
-      {addingCoinLayout || editingCoinLayout || removingCoinLayout ? 
+        {addingCoinLayout || editingCoinLayout || removingCoinLayout ? 
         <div id="coinLayout">
             <div className="entryHeader">
                 <h4>{addingCoinLayout ? "Adding a new coin" 
@@ -152,13 +153,23 @@ function Database() {
                   : editingCoinLayout ? 
                     <input type="submit" form="addForm" value="Edit"/>
                   : <input type="submit" form="addForm" value="Remove"/>}
-                    <button onClick={() => setAddingCoinLayout(false)}>Cancel</button>
+                    <button onClick={() => falseLayouts()}>Cancel</button>
                 </div>
             </div>
         </div>
         :
         <>
         </>}
+      </div>
+      <div className="coinGrid">
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+      </div>
     </div>
   )
 }
