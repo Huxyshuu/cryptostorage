@@ -8,6 +8,7 @@ function Database() {
   const [addingCoinLayout, setAddingCoinLayout] = useState(false);
   const [editingCoinLayout, setEditingCoinLayout] = useState(false);
   const [removingCoinLayout, setRemovingCoinLayout] = useState(false);
+  const [allCoins, setAllCoins] = useState([{}]);
 
   const createNew = (event: React.FormEvent) => {
     event.preventDefault();
@@ -69,8 +70,11 @@ function Database() {
     console.log("Removing Coin!");
   }
 
-  
-  
+  const queryAllCoins = async () => {
+    setAllCoins(await queryCoins(getDatabase()));
+  }  
+  queryAllCoins()  
+
   useEffect(() => {
     loadData();
   })
@@ -162,13 +166,9 @@ function Database() {
         </>}
       </div>
       <div className="coinGrid">
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
-        <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="btc" />
+        {allCoins.map(coin => {
+          return <img src={coin.img} alt={coin.name} />
+        })}
       </div>
     </div>
   )
