@@ -277,5 +277,13 @@
         margin: 0;
         width: 4rem;
         height: 4rem;
+        border-radius: 20%;
+    }
+
+    .grayedHover:hover {
+        background-color: $white;
+        box-shadow: 0 0 0.4rem 0.4rem $main-light;
+        border-radius: 10%;
+        cursor: pointer;
     }
 }

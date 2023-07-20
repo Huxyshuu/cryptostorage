@@ -8,6 +8,10 @@ function Database() {
   const [addingCoinLayout, setAddingCoinLayout] = useState(false);
   const [editingCoinLayout, setEditingCoinLayout] = useState(false);
   const [removingCoinLayout, setRemovingCoinLayout] = useState(false);
+
+  const [editingCoin, setEditingCoin] = useState(false);
+  const [removingCoin, setRemovingCoin] = useState(false);
+
   const [allCoins, setAllCoins] = useState([{}]);
 
   const createNew = (event: React.FormEvent) => {
@@ -27,6 +31,11 @@ function Database() {
     setAddingCoinLayout(false);
     setEditingCoinLayout(false);
     setRemovingCoinLayout(false);
+  }
+
+  const falseActives = () => {
+    setEditingCoin(false);
+    setRemovingCoin(false);
   }
 
   const addCoin = async (event: React.FormEvent) => {
@@ -60,14 +69,12 @@ function Database() {
     }
   }
 
-  const editCoin = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log("Editing Coin!");
+  const editCoin = async (coin: object) => {
+    console.log(`Editing ${coin.short}!`);
   }
 
-  const removeCoin = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log("Removing Coin!");
+  const removeCoin = async (coin: object) => {
+    console.log(`Removing ${coin.short}!`);
   }
 
   const queryAllCoins = async () => {
@@ -115,9 +122,9 @@ function Database() {
           <p id="lastEdited">Last edited: -</p>
           <p id="fileSize">File size: -</p>
         </div>
-        <button onClick={() => {falseLayouts(), setAddingCoinLayout(!addingCoinLayout)}} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
-        <button onClick={() => {falseLayouts(), setEditingCoinLayout(!editingCoinLayout)}} className={`coinButton ${ editingCoinLayout ? "grayed" : ""}`}>Edit Coin</button>
-        <button onClick={() => {falseLayouts(), setRemovingCoinLayout(!removingCoinLayout)}} className={`coinButton ${ removingCoinLayout ? "grayed" : ""}`}>Remove Coin</button>
+        <button onClick={() => {falseLayouts(), falseActives(), setAddingCoinLayout(!addingCoinLayout)}} className={`coinButton ${ addingCoinLayout ? "grayed" : ""}`}>New Coin</button>
+        <button onClick={() => {falseLayouts(), falseActives(), setEditingCoin(!editingCoin)}} className={`coinButton ${ editingCoin ? "grayed" : ""}`}>Edit Coin</button>
+        <button onClick={() => {falseLayouts(), falseActives(), setRemovingCoin(!removingCoin)}} className={`coinButton ${ removingCoin ? "grayed" : ""}`}>Remove Coin</button>
 
 
         {addingCoinLayout || editingCoinLayout || removingCoinLayout ? 
@@ -166,8 +173,13 @@ function Database() {
         </>}
       </div>
       <div className="coinGrid">
-        {allCoins.map(coin => {
-          return <img src={coin.img} alt={coin.name} />
+        {allCoins.map((coin, index) => {
+          return <img onClick={() => {
+            if (editingCoin) editCoin(coin);
+            if (removingCoin) removeCoin(coin);
+          }} src={coin.img} alt={coin.name} 
+          key={index + "-coin-" + coin.name}
+          className={ editingCoin || removingCoin ? "grayedHover" : ""}/>
         })}
       </div>
     </div>
