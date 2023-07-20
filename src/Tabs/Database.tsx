@@ -127,13 +127,31 @@ function Database() {
                     <p>Abbrev.</p>
                     <p>Image</p>
                 </div>
+                {addingCoinLayout ? 
                 <form id="addForm" onSubmit={(e: React.FormEvent): void => {addCoin(e)}} className="info"> 
                     <input type="text" id="name"/>
                     <input type="text" id="short"/>
                     <input type="text" id="image"/>
-                </form>
+                </form> 
+                : editingCoinLayout ? 
+                <form id="addForm" onSubmit={(e: React.FormEvent): void => {editCoin(e)}} className="info"> 
+                  <input type="text" id="name"/>
+                  <input type="text" id="short"/>
+                  <input type="text" id="image"/>
+                </form> 
+                : 
+                <form id="addForm" onSubmit={(e: React.FormEvent): void => {removeCoin(e)}} className="info"> 
+                    <input type="text" id="name"/>
+                    <input type="text" id="short"/>
+                    <input type="text" id="image"/>
+                </form>}
+                
                 <div className="button">
-                    <input type="submit" form="addForm" value="Add"/>
+                  {addingCoinLayout ? 
+                    <input type="submit" form="addForm" value="Add"/> 
+                  : editingCoinLayout ? 
+                    <input type="submit" form="addForm" value="Edit"/>
+                  : <input type="submit" form="addForm" value="Remove"/>}
                     <button onClick={() => setAddingCoinLayout(false)}>Cancel</button>
                 </div>
             </div>
