@@ -2,13 +2,11 @@
      alt="Size Limit logo by Anton Lovchikov" width="222" height="206">
 
 # Crypto Storage
-
 ### _A great alternative for bookkeeping asset transactions_ 
-
 
 Crypto storage is built on Electron.js to be a installable application for windows computers. Replacing tedious Excel spreadsheet manipulation by having a proper interactive UI.
 
-## Features
+## Features 💡
 
 - Adding and removing a local database
 - Switching between different databases
