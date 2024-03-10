@@ -1,5 +1,5 @@
-<img src="https://i.imgur.com/Eom1pC7.png" align="right"
-     alt="Logo of cryptostorage" width="222" height="206">
+<img src="https://i.imgur.com/M3Fjazy.png" align="right"
+     alt="Logo of cryptostorage" width="304" height="178">
 
 # Crypto Storage
 ### _A great alternative for bookkeeping asset transactions_ 
