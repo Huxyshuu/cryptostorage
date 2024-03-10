@@ -1,5 +1,5 @@
 <img src="https://i.imgur.com/Eom1pC7.png" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="222" height="206">
+     alt="Logo of cryptostorage" width="222" height="206">
 
 # Crypto Storage
 ### _A great alternative for bookkeeping asset transactions_ 
